@@ -80,7 +80,8 @@ body {
   align-items: start;
 }
 
-.validation-panel {
+.validation-panel,
+.email-preview-panel {
   grid-column: 1 / -1;
 }
 
@@ -101,6 +102,7 @@ body {
 .upload-area,
 .controls-panel,
 .preview-panel,
+.email-preview-panel,
 .validation-panel,
 .download-section {
   background: var(--bg-card);
@@ -113,6 +115,7 @@ body {
 /* Section Headings */
 .controls-panel h3,
 .preview-header h3,
+.email-preview-panel h3,
 .validation-panel h3,
 .download-section h3 {
   margin: 0 0 1.5rem;
@@ -494,6 +497,15 @@ body {
   gap: 2rem;
 }
 
+.preview-download-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
 /* Validation Panel */
 .validation-status {
   display: flex;
@@ -676,6 +688,172 @@ body {
 .download-button.primary:hover {
   background: var(--primary-hover);
   box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3);
+}
+
+.preview-download-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Email Preview */
+.email-preview-panel {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.email-preview-panel h3 {
+  margin: 0 0 1.5rem;
+  color: var(--text-main);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.email-preview-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.email-preview-placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.email-inbox-mockup {
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.email-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.email-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.2s;
+  align-items: flex-start;
+}
+
+.email-item:hover {
+  background: #f9fafb;
+}
+
+.email-item-unread {
+  background: #f0f9ff;
+  border-left: 3px solid var(--primary);
+}
+
+.email-checkbox {
+  width: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-top: 0.5rem;
+}
+
+.email-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.email-star {
+  width: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0.5rem;
+  color: #9ca3af;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.email-star:hover {
+  color: #fbbf24;
+}
+
+.email-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bimi-logo-in-email {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bimi-logo-in-email svg {
+  width: 32px;
+  height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+}
+
+.email-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.email-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.email-sender {
+  font-weight: 600;
+  color: var(--text-main);
+  min-width: 120px;
+}
+
+.email-subject {
+  flex: 1;
+  color: var(--text-main);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email-time {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  flex-shrink: 0;
+}
+
+.email-preview-text {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 0.25rem;
 }
 
 /* Footer - Keeping user's preferred simplified style */

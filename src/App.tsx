@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react';
 import { UploadArea } from './components/UploadArea';
 import { ControlsPanel } from './components/ControlsPanel';
+import { OriginalPreview } from './components/OriginalPreview';
 import { PreviewPanel } from './components/PreviewPanel';
+import { EmailPreview } from './components/EmailPreview';
 import { ValidationPanel } from './components/ValidationPanel';
 import { Footer } from './components/Footer';
 import { convertToBimiSvg } from './core';
@@ -145,26 +147,20 @@ function App() {
           </div>
 
           <div className="right-column">
-            <PreviewPanel
+            <OriginalPreview
               originalFile={originalFile}
               originalPreview={originalPreview}
-              bimiSvg={bimiSvg}
+              options={options}
             />
 
-            {bimiSvg && (
-              <div className="download-section">
-                <h3>Download</h3>
-                <div className="download-buttons">
-                  <button onClick={handleDownloadSvg} className="download-button primary">
-                    Download BIMI SVG
-                  </button>
-                  <button onClick={handleCopySvg} className="download-button">
-                    Copy SVG as Text
-                  </button>
-                </div>
-              </div>
-            )}
+            <PreviewPanel 
+              bimiSvg={bimiSvg}
+              onDownload={handleDownloadSvg}
+              onCopy={handleCopySvg}
+            />
           </div>
+
+          <EmailPreview bimiSvg={bimiSvg} companyName={options.title || 'Your Company'} />
 
           <ValidationPanel validation={validation} isSvgSource={isSvgSource} />
         </div>
