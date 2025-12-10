@@ -1,4 +1,5 @@
 # VerifyBIMI
+[VerifyBIMI - Convert and Validate Logos for BIMI](https://verifybimi.com)
 
 A browser-only web application that converts uploaded logos (PNG, JPG, SVG) into BIMI-compliant SVG format with live preview and validation.
 
