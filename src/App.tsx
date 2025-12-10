@@ -21,6 +21,7 @@ function App() {
     backgroundColor: '#FFFFFF',
     shape: 'circle',
     paddingPercent: 12.5,
+    title: '',
   });
 
   const acceptedFormats = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];

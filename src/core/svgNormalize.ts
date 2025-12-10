@@ -26,6 +26,7 @@ export function normalizeSvg(
     backgroundColor = DEFAULT_BACKGROUND_COLOR,
     shape = 'circle',
     paddingPercent = DEFAULT_PADDING_PERCENT,
+    title,
   } = options;
 
   const parser = new DOMParser();
@@ -131,6 +132,14 @@ export function normalizeSvg(
   
   // Clear SVG and rebuild
   svgElement.innerHTML = '';
+  
+  // Add title element if provided (required by some BIMI validators for accessibility)
+  if (title) {
+    const titleElement = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    titleElement.textContent = title;
+    svgElement.appendChild(titleElement);
+  }
+  
   svgElement.appendChild(background);
 
   // Add content with transform

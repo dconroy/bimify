@@ -13,6 +13,7 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled }:
     backgroundColor = '#FFFFFF',
     shape = 'circle',
     paddingPercent = 12.5,
+    title = '',
   } = options;
 
   const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +26,10 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled }:
 
   const handlePaddingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onOptionsChange({ ...options, paddingPercent: parseFloat(e.target.value) });
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onOptionsChange({ ...options, title: e.target.value });
   };
 
   return (
@@ -98,6 +103,24 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled }:
           <span>5%</span>
           <span>25%</span>
         </div>
+      </div>
+
+      <div className="control-group">
+        <label htmlFor="svg-title">
+          SVG Title <span className="label-hint">(Recommended for BIMI)</span>
+        </label>
+        <input
+          id="svg-title"
+          type="text"
+          value={title}
+          onChange={handleTitleChange}
+          disabled={disabled}
+          placeholder="e.g., Company Logo"
+          className="text-input"
+        />
+        <p className="control-hint">
+          Some BIMI validators require a title element for accessibility. This will be added as a &lt;title&gt; tag in the SVG.
+        </p>
       </div>
 
       <button

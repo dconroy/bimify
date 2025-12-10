@@ -21,7 +21,7 @@ const getGAMeasurementId = (): string => {
     }
   }
   // Fallback to placeholder
-  return 'G-XXXXXXXXXX';
+  return 'G-5NC3F2GFGJ';
 };
 
 const GA_MEASUREMENT_ID = getGAMeasurementId();

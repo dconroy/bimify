@@ -9,6 +9,7 @@ export type ConvertOptions = {
   backgroundColor?: string;      // hex string, default "#FFFFFF"
   shape?: Shape;                 // default "circle"
   paddingPercent?: number;        // default 12.5
+  title?: string;                // SVG title element (for accessibility/BIMI compliance)
 };
 
 export type ValidationResult = {

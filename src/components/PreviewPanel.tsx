@@ -37,11 +37,26 @@ export function PreviewPanel({ originalFile, originalPreview, bimiSvg }: Preview
         <div className="preview-item">
           <h4>BIMI Version</h4>
           {bimiSvg ? (
-            <div 
-              className="preview-container" 
-              style={{ transform: `scale(${zoom})` }}
-              dangerouslySetInnerHTML={{ __html: bimiSvg }}
-            />
+            <>
+              <div className="preview-modes">
+                <div className="preview-mode">
+                  <div className="preview-mode-label">Light Mode</div>
+                  <div 
+                    className="preview-container preview-light" 
+                    style={{ transform: `scale(${zoom})` }}
+                    dangerouslySetInnerHTML={{ __html: bimiSvg }}
+                  />
+                </div>
+                <div className="preview-mode">
+                  <div className="preview-mode-label">Dark Mode</div>
+                  <div 
+                    className="preview-container preview-dark" 
+                    style={{ transform: `scale(${zoom})` }}
+                    dangerouslySetInnerHTML={{ __html: bimiSvg }}
+                  />
+                </div>
+              </div>
+            </>
           ) : (
             <div className="preview-placeholder">
               Convert to see BIMI version

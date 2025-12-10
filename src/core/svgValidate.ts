@@ -123,6 +123,12 @@ export function validateBimiSvg(svg: string): ValidationResult {
       result.errors.push('Background color has transparency (alpha channel). BIMI requires opaque background');
     }
 
+    // Check for title element (recommended/required by some BIMI validators)
+    const titleElement = svgElement.querySelector('title');
+    if (!titleElement || !titleElement.textContent?.trim()) {
+      result.warnings.push('SVG missing <title> element. Some BIMI validators require a title for accessibility.');
+    }
+
     // Check artwork bounding box (approximate)
     // Get all elements except the background
     const allElements = Array.from(svgElement.querySelectorAll('*'));
