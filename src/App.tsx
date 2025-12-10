@@ -31,7 +31,7 @@ function App() {
     initAnalytics();
   }, []);
 
-  const handleFileSelect = useCallback((file: File) => {
+  const handleFileSelect = useCallback(async (file: File) => {
     setOriginalFile(file);
     setError(null);
     setBimiSvg(null);
@@ -46,6 +46,30 @@ function App() {
       setOriginalPreview(e.target?.result as string);
     };
     reader.readAsDataURL(file);
+
+    // Extract title from SVG if it's an SVG file
+    if (file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')) {
+      try {
+        const svgText = await file.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgText, 'image/svg+xml');
+        const titleElement = doc.querySelector('title');
+        
+        if (titleElement && titleElement.textContent) {
+          const existingTitle = titleElement.textContent.trim();
+          if (existingTitle) {
+            // Pre-populate the title field
+            setOptions(prev => ({
+              ...prev,
+              title: existingTitle,
+            }));
+          }
+        }
+      } catch (err) {
+        // Silently fail - not critical if we can't extract the title
+        console.debug('Could not extract title from SVG:', err);
+      }
+    }
   }, []);
 
   const handleConvert = useCallback(async () => {
