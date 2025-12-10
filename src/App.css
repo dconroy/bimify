@@ -156,6 +156,41 @@
   font-family: monospace;
 }
 
+.text-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.text-input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.label-hint {
+  font-weight: normal;
+  color: #999;
+  font-size: 0.9em;
+}
+
+.control-hint {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  line-height: 1.4;
+}
+
 .radio-group {
   display: flex;
   gap: 1.5rem;
@@ -343,8 +378,11 @@
 }
 
 .preview-dark {
+  /* Dark background to simulate dark email client environment */
   background: #1a1a1a;
   border: 2px solid #333;
+  /* The SVG itself keeps its original background color (e.g., white) */
+  /* This simulates how the BIMI logo appears in a dark email client */
 }
 
 /* Validation Panel */

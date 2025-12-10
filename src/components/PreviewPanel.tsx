@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 
 interface PreviewPanelProps {
   originalFile: File | null;
@@ -6,47 +6,8 @@ interface PreviewPanelProps {
   bimiSvg: string | null;
 }
 
-/**
- * Creates a dark mode version of the SVG by replacing the background color
- */
-function createDarkModeSvg(svgString: string): string {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(svgString, 'image/svg+xml');
-    const svgElement = doc.querySelector('svg');
-    
-    if (!svgElement) return svgString;
-
-    // Find and replace background circle or rect with dark color
-    const backgroundCircle = svgElement.querySelector('circle[fill]');
-    const backgroundRect = svgElement.querySelector('rect[fill]');
-    
-    // Use a dark gray/black background for dark mode
-    const darkBackgroundColor = '#1a1a1a';
-    
-    if (backgroundCircle) {
-      backgroundCircle.setAttribute('fill', darkBackgroundColor);
-    } else if (backgroundRect) {
-      backgroundRect.setAttribute('fill', darkBackgroundColor);
-    }
-
-    const serializer = new XMLSerializer();
-    return serializer.serializeToString(svgElement);
-  } catch (err) {
-    // If parsing fails, return original
-    console.debug('Could not create dark mode SVG:', err);
-    return svgString;
-  }
-}
-
 export function PreviewPanel({ originalFile, originalPreview, bimiSvg }: PreviewPanelProps) {
   const [zoom, setZoom] = useState(1);
-
-  // Create dark mode version of SVG
-  const darkModeSvg = useMemo(() => {
-    if (!bimiSvg) return null;
-    return createDarkModeSvg(bimiSvg);
-  }, [bimiSvg]);
 
   return (
     <div className="preview-panel">
@@ -93,9 +54,7 @@ export function PreviewPanel({ originalFile, originalPreview, bimiSvg }: Preview
                     className="preview-container preview-dark" 
                     style={{ transform: `scale(${zoom})` }}
                   >
-                    {darkModeSvg && (
-                      <div dangerouslySetInnerHTML={{ __html: darkModeSvg }} />
-                    )}
+                    <div dangerouslySetInnerHTML={{ __html: bimiSvg }} />
                   </div>
                 </div>
               </div>
