@@ -313,6 +313,7 @@
   justify-content: center;
   min-height: 200px;
   transform-origin: center;
+  position: relative;
 }
 
 .preview-container img,
@@ -327,6 +328,16 @@
 
 .preview-container svg {
   display: block;
+}
+
+/* Add subtle stroke to the background shape in light mode to show white background boundaries */
+/* Target the first circle or rect (the background element) */
+.preview-light svg circle:first-of-type,
+.preview-light svg rect:first-of-type,
+.preview-light > div svg circle:first-of-type,
+.preview-light > div svg rect:first-of-type {
+  stroke: rgba(0, 0, 0, 0.12);
+  stroke-width: 0.5;
 }
 
 .preview-container > div {
