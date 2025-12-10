@@ -178,35 +178,80 @@ export function validateBimiSvg(svg: string): ValidationResult {
     });
 
     if (nonBackgroundElements.length > 0) {
-      // Approximate bounding box by checking if any elements are outside safe area
+      // Check if content is properly contained within safe padding area
       // For a 100x100 viewBox with 12.5% padding, safe area is 12.5 to 87.5
       const paddingPercent = 12.5; // Default, could be calculated from actual padding
       const safeMin = (width * paddingPercent) / 100;
       const safeMax = width - safeMin;
+      const tolerance = width * 0.02; // 2% tolerance to avoid false positives
 
-      // Check a few key elements for position
-      // This is an approximation - full bounding box calculation would require more complex logic
-      for (const el of nonBackgroundElements.slice(0, 10)) { // Sample first 10 elements
-        const svgEl = el as SVGGraphicsElement;
-        if (svgEl.getBBox) {
-          try {
-            const bbox = svgEl.getBBox();
-            if (bbox.x < safeMin || bbox.y < safeMin || 
-                bbox.x + bbox.width > safeMax || bbox.y + bbox.height > safeMax) {
-              result.warnings.push('Some artwork elements may extend outside the safe padding area');
-              break;
-            }
-          } catch {
-            // getBBox might fail for some elements, skip
+      // Try to get the overall bounding box of all content elements
+      // Check if the content group (if it exists) is within bounds
+      let contentGroup: SVGGraphicsElement | null = null;
+      for (const el of nonBackgroundElements) {
+        if (el.tagName === 'g' && (el as Element).getAttribute('transform')) {
+          contentGroup = el as SVGGraphicsElement;
+          break;
+        }
+      }
+
+      // If we found a content group, check its bounding box
+      if (contentGroup && contentGroup.getBBox) {
+        try {
+          const bbox = contentGroup.getBBox();
+          // Only warn if a significant portion extends outside (more than tolerance)
+          if (bbox.x < safeMin - tolerance || bbox.y < safeMin - tolerance || 
+              bbox.x + bbox.width > safeMax + tolerance || bbox.y + bbox.height > safeMax + tolerance) {
+            result.warnings.push('Some artwork elements may extend outside the safe padding area');
           }
+        } catch {
+          // getBBox might fail, skip this check
+        }
+      } else {
+        // Fallback: check individual elements, but be more lenient
+        let elementsOutside = 0;
+        let elementsChecked = 0;
+        
+        for (const el of nonBackgroundElements.slice(0, 20)) { // Check more elements
+          const svgEl = el as SVGGraphicsElement;
+          if (svgEl.getBBox) {
+            try {
+              elementsChecked++;
+              const bbox = svgEl.getBBox();
+              // Only count as "outside" if significantly outside (more than tolerance)
+              if (bbox.x < safeMin - tolerance || bbox.y < safeMin - tolerance || 
+                  bbox.x + bbox.width > safeMax + tolerance || bbox.y + bbox.height > safeMax + tolerance) {
+                elementsOutside++;
+              }
+            } catch {
+              // getBBox might fail for some elements, skip
+            }
+          }
+        }
+        
+        // Only warn if more than 30% of checked elements are significantly outside
+        if (elementsChecked > 0 && elementsOutside / elementsChecked > 0.3) {
+          result.warnings.push('Some artwork elements may extend outside the safe padding area');
         }
       }
     }
 
-    // Check for external references (warnings)
-    const styleElements = svgElement.querySelectorAll('style');
-    if (styleElements.length > 0) {
-      result.warnings.push('SVG contains <style> tags. Inline styles are preferred for BIMI');
+    // Check for filters, gradients, masks, clipPaths (warnings, not errors)
+    const hasFilters = svgElement.querySelectorAll('filter').length > 0;
+    const hasGradients = svgElement.querySelectorAll('linearGradient, radialGradient').length > 0;
+    const hasMasks = svgElement.querySelectorAll('mask').length > 0;
+    const hasClipPaths = svgElement.querySelectorAll('clipPath').length > 0;
+    
+    if (hasFilters || hasGradients || hasMasks || hasClipPaths) {
+      const features = [];
+      if (hasFilters) features.push('filters');
+      if (hasGradients) features.push('gradients');
+      if (hasMasks) features.push('masks');
+      if (hasClipPaths) features.push('clipPaths');
+      
+      result.warnings.push(
+        `This logo uses ${features.join(', ')}. Some mailbox providers may render these differently. For maximum compatibility, consider a simplified version.`
+      );
     }
 
     // Check for external font references
