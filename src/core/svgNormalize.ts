@@ -40,14 +40,27 @@ export function normalizeSvg(
   // Remove unsupported elements
   removeUnsupportedElements(svgElement);
 
+  // Get original viewBox to calculate scale factor
+  const originalViewBox = svgElement.getAttribute('viewBox');
+  let originalWidth = DEFAULT_VIEWBOX_SIZE;
+  let originalHeight = DEFAULT_VIEWBOX_SIZE;
+  
+  if (originalViewBox) {
+    const viewBoxValues = originalViewBox.split(/\s+/).map(Number);
+    if (viewBoxValues.length === 4) {
+      originalWidth = viewBoxValues[2];
+      originalHeight = viewBoxValues[3];
+    }
+  }
+
+  // Calculate scale factor from original to new viewBox
+  const scaleFactor = DEFAULT_VIEWBOX_SIZE / Math.max(originalWidth, originalHeight);
+
   // Set square viewBox
   svgElement.setAttribute('viewBox', `0 0 ${DEFAULT_VIEWBOX_SIZE} ${DEFAULT_VIEWBOX_SIZE}`);
   svgElement.setAttribute('width', String(DEFAULT_VIEWBOX_SIZE));
   svgElement.setAttribute('height', String(DEFAULT_VIEWBOX_SIZE));
   svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-
-  // Remove existing viewBox, width, height attributes and re-add
-  // Remove xmlns if present (we'll add it back)
 
   // Calculate safe area
   const safeMin = (DEFAULT_VIEWBOX_SIZE * paddingPercent) / 100;
@@ -70,35 +83,67 @@ export function normalizeSvg(
     }
   );
 
-  // Calculate bounding box of content
+  // Calculate bounding box of content using original viewBox
+  // We need to measure the actual rendered bounds, accounting for transforms
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   
-  // Create a temporary SVG to measure content
+  // Create a temporary SVG with original viewBox to measure content accurately
+  // Use a larger size so transforms can be properly calculated
   const tempSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  tempSvg.setAttribute('viewBox', `0 0 ${DEFAULT_VIEWBOX_SIZE} ${DEFAULT_VIEWBOX_SIZE}`);
+  tempSvg.setAttribute('viewBox', `0 0 ${originalWidth} ${originalHeight}`);
   tempSvg.style.position = 'absolute';
   tempSvg.style.visibility = 'hidden';
+  tempSvg.style.width = `${originalWidth}px`; // Use actual size for proper transform calculation
+  tempSvg.style.height = `${originalHeight}px`;
   document.body.appendChild(tempSvg);
 
   try {
-    for (const el of contentElements) {
-      const cloned = el.cloneNode(true) as Element;
-      tempSvg.appendChild(cloned);
+    // Clone all content elements into the temp SVG to measure their actual bounds
+    // This preserves transforms and allows getBBox to calculate correctly
+    if (contentElements.length > 0) {
+      const wrapperGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       
-      try {
-        const svgEl = cloned as SVGGraphicsElement;
-        if (svgEl.getBBox) {
-          const bbox = svgEl.getBBox();
-          minX = Math.min(minX, bbox.x);
-          minY = Math.min(minY, bbox.y);
-          maxX = Math.max(maxX, bbox.x + bbox.width);
-          maxY = Math.max(maxY, bbox.y + bbox.height);
-        }
-      } catch {
-        // Some elements might not have getBBox, skip
+      for (const el of contentElements) {
+        const cloned = el.cloneNode(true) as Element;
+        wrapperGroup.appendChild(cloned);
       }
       
-      tempSvg.removeChild(cloned);
+      tempSvg.appendChild(wrapperGroup);
+      
+      // Force a reflow so the SVG is rendered and transforms are applied
+      // Accessing offsetHeight forces a layout calculation
+      void (tempSvg as any).offsetHeight;
+      
+      try {
+        // Try to get bounding box of the wrapper group (accounts for all transforms)
+        const wrapperEl = wrapperGroup as SVGGraphicsElement;
+        if (wrapperEl.getBBox) {
+          const bbox = wrapperEl.getBBox();
+          minX = bbox.x;
+          minY = bbox.y;
+          maxX = bbox.x + bbox.width;
+          maxY = bbox.y + bbox.height;
+        }
+      } catch (err) {
+        // If getBBox fails on the group (e.g., empty or invalid), try individual elements
+        // This handles cases where the group itself can't be measured
+        for (const el of Array.from(wrapperGroup.children)) {
+          const svgEl = el as SVGGraphicsElement;
+          if (svgEl.getBBox) {
+            try {
+              const bbox = svgEl.getBBox();
+              minX = Math.min(minX, bbox.x);
+              minY = Math.min(minY, bbox.y);
+              maxX = Math.max(maxX, bbox.x + bbox.width);
+              maxY = Math.max(maxY, bbox.y + bbox.height);
+            } catch {
+              // Skip elements that can't be measured
+            }
+          }
+        }
+      }
+      
+      tempSvg.removeChild(wrapperGroup);
     }
   } finally {
     document.body.removeChild(tempSvg);
@@ -110,21 +155,35 @@ export function normalizeSvg(
   let translateY = 0;
 
   if (isFinite(minX) && isFinite(minY) && isFinite(maxX) && isFinite(maxY)) {
+    // Content is measured in original viewBox coordinates
+    // First scale from original to new viewBox, then fit to safe area
     const contentWidth = maxX - minX;
     const contentHeight = maxY - minY;
     
     if (contentWidth > 0 && contentHeight > 0) {
-      // Scale to fit safe area
-      const scaleX = safeWidth / contentWidth;
-      const scaleY = safeHeight / contentHeight;
-      scale = Math.min(scaleX, scaleY);
+      // Scale content from original viewBox to new viewBox
+      const scaledContentWidth = contentWidth * scaleFactor;
+      const scaledContentHeight = contentHeight * scaleFactor;
       
-      // Center in safe area
+      // Then scale to fit safe area
+      const scaleX = safeWidth / scaledContentWidth;
+      const scaleY = safeHeight / scaledContentHeight;
+      scale = Math.min(scaleX, scaleY) * scaleFactor; // Combined scale
+      
+      // Center in safe area (accounting for original coordinates)
       const scaledWidth = contentWidth * scale;
       const scaledHeight = contentHeight * scale;
-      translateX = safeMin + (safeWidth - scaledWidth) / 2 - minX * scale;
-      translateY = safeMin + (safeHeight - scaledHeight) / 2 - minY * scale;
+      const scaledMinX = minX * scale;
+      const scaledMinY = minY * scale;
+      translateX = safeMin + (safeWidth - scaledWidth) / 2 - scaledMinX;
+      translateY = safeMin + (safeHeight - scaledHeight) / 2 - scaledMinY;
     }
+  } else {
+    // If we couldn't measure, still apply the scale factor
+    scale = scaleFactor;
+    // Center content assuming it's in the middle of original viewBox
+    translateX = safeMin + (safeWidth - (originalWidth * scaleFactor)) / 2;
+    translateY = safeMin + (safeHeight - (originalHeight * scaleFactor)) / 2;
   }
 
   // Create background element
@@ -143,18 +202,21 @@ export function normalizeSvg(
   svgElement.appendChild(background);
 
   // Add content with transform
+  // We need to apply our normalization transform, but preserve any existing transforms
+  // by wrapping the content in a new group
   if (contentElements.length > 0) {
-    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    group.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
+    const wrapperGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    wrapperGroup.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
     
     for (const el of contentElements) {
       // Clone and inline styles
+      // Note: This preserves any transforms on the element itself (e.g., matrix transforms on groups)
       const cloned = el.cloneNode(true) as Element;
       inlineStyles(cloned as SVGElement);
-      group.appendChild(cloned);
+      wrapperGroup.appendChild(cloned);
     }
     
-    svgElement.appendChild(group);
+    svgElement.appendChild(wrapperGroup);
   }
 
   // Serialize
