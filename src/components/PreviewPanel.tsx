@@ -44,16 +44,18 @@ export function PreviewPanel({ originalFile, originalPreview, bimiSvg }: Preview
                   <div 
                     className="preview-container preview-light" 
                     style={{ transform: `scale(${zoom})` }}
-                    dangerouslySetInnerHTML={{ __html: bimiSvg }}
-                  />
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: bimiSvg }} />
+                  </div>
                 </div>
                 <div className="preview-mode">
                   <div className="preview-mode-label">Dark Mode</div>
                   <div 
                     className="preview-container preview-dark" 
                     style={{ transform: `scale(${zoom})` }}
-                    dangerouslySetInnerHTML={{ __html: bimiSvg }}
-                  />
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: bimiSvg }} />
+                  </div>
                 </div>
               </div>
             </>
