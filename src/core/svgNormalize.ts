@@ -71,8 +71,16 @@ export function normalizeSvg(
   const safeHeight = safeMax - safeMin;
 
   // Get all content elements (everything except potential backgrounds)
+  // Also preserve defs for gradients, filters, etc.
+  const defsElements = Array.from(svgElement.querySelectorAll('defs'));
+  
+  // Extract style rules from style blocks for manual application
+  const styleRules = extractStyleRules(svgElement);
+  
   const contentElements = Array.from(svgElement.children).filter(
     el => {
+      if (el.tagName === 'defs') return false; // Handled separately
+      if (el.tagName === 'style') return false; // Styles should be inlined or handled via defs
       if (el.tagName === 'circle') {
         const r = parseFloat(el.getAttribute('r') || '0');
         return r !== DEFAULT_VIEWBOX_SIZE / 2;
@@ -211,22 +219,60 @@ export function normalizeSvg(
   
   svgElement.appendChild(background);
 
+  // Re-add defs
+  defsElements.forEach(defs => {
+    svgElement.appendChild(defs.cloneNode(true));
+  });
+
   // Add content with transform
   // We need to apply our normalization transform, but preserve any existing transforms
   // by wrapping the content in a new group
   if (contentElements.length > 0) {
-    const wrapperGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    wrapperGroup.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
+    // First, inline styles while elements are still in context with defs/styles
+    // Create a temporary SVG with defs to properly compute styles
+    const tempSvgForStyles = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    tempSvgForStyles.setAttribute('viewBox', `0 0 ${originalWidth} ${originalHeight}`);
+    tempSvgForStyles.style.position = 'absolute';
+    tempSvgForStyles.style.visibility = 'hidden';
+    tempSvgForStyles.style.width = '1px';
+    tempSvgForStyles.style.height = '1px';
+    document.body.appendChild(tempSvgForStyles);
     
-    for (const el of contentElements) {
-      // Clone and inline styles
-      // Note: This preserves any transforms on the element itself (e.g., matrix transforms on groups)
-      const cloned = el.cloneNode(true) as Element;
-      inlineStyles(cloned as SVGElement);
-      wrapperGroup.appendChild(cloned);
+    // Add defs to temp SVG so styles can be computed
+    defsElements.forEach(defs => {
+      tempSvgForStyles.appendChild(defs.cloneNode(true));
+    });
+    
+    try {
+      // Process each element: mount it, inline styles, then clone
+      const processedElements: Element[] = [];
+      for (const el of contentElements) {
+        const cloned = el.cloneNode(true) as Element;
+        tempSvgForStyles.appendChild(cloned);
+        
+        // Apply style rules from CSS classes
+        applyStyleRules(cloned as SVGElement, styleRules);
+        
+        // Now that it's in the DOM with styles, inline any remaining computed styles
+        inlineStyles(cloned as SVGElement);
+        
+        // Remove from temp and keep for final SVG
+        tempSvgForStyles.removeChild(cloned);
+        processedElements.push(cloned);
+      }
+      
+      // Now add processed elements to the final SVG with transform
+      const wrapperGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      wrapperGroup.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
+      
+      processedElements.forEach(el => {
+        wrapperGroup.appendChild(el);
+      });
+      
+      svgElement.appendChild(wrapperGroup);
+    } finally {
+      document.body.removeChild(tempSvgForStyles);
     }
-    
-    svgElement.appendChild(wrapperGroup);
   }
 
   // Serialize
@@ -293,28 +339,141 @@ function removeUnsupportedElements(svgElement: Element): void {
 }
 
 /**
- * Inlines styles from style attributes and removes external references
+ * Extracts CSS rules from style blocks in the SVG
+ */
+function extractStyleRules(svgElement: Element): Map<string, Map<string, string>> {
+  const rules = new Map<string, Map<string, string>>();
+  
+  // Find all style blocks (in defs or at root)
+  const styleBlocks = svgElement.querySelectorAll('style');
+  
+  for (const styleBlock of styleBlocks) {
+    const cssText = styleBlock.textContent || '';
+    
+    // Simple CSS parser - matches .class-name { property: value; }
+    const classRuleRegex = /\.([a-zA-Z0-9_-]+)\s*\{([^}]+)\}/g;
+    let match;
+    
+    while ((match = classRuleRegex.exec(cssText)) !== null) {
+      const className = match[1];
+      const propertiesText = match[2];
+      
+      if (!rules.has(className)) {
+        rules.set(className, new Map());
+      }
+      
+      const classRules = rules.get(className)!;
+      
+      // Parse properties (property: value;)
+      const propertyRegex = /([a-zA-Z-]+):\s*([^;]+);?/g;
+      let propMatch;
+      
+      while ((propMatch = propertyRegex.exec(propertiesText)) !== null) {
+        const prop = propMatch[1].trim();
+        const value = propMatch[2].trim();
+        classRules.set(prop, value);
+      }
+    }
+  }
+  
+  return rules;
+}
+
+/**
+ * Applies CSS class rules as inline attributes
+ */
+function applyStyleRules(element: SVGElement, styleRules: Map<string, Map<string, string>>): void {
+  const classAttr = element.getAttribute('class');
+  if (!classAttr) {
+    // Recursively process children
+    Array.from(element.children).forEach(child => {
+      applyStyleRules(child as SVGElement, styleRules);
+    });
+    return;
+  }
+  
+  // Split class names (can have multiple)
+  const classNames = classAttr.split(/\s+/).filter(c => c);
+  
+  for (const className of classNames) {
+    const classRule = styleRules.get(className);
+    if (!classRule) continue;
+    
+    // Apply each property from the class
+    for (const [prop, value] of classRule.entries()) {
+      // Only set if not already set as attribute
+      if (!element.hasAttribute(prop)) {
+        // Convert CSS property names to SVG attribute names
+        const attrName = prop === 'stroke-width' ? 'stroke-width' :
+                        prop === 'fill' ? 'fill' :
+                        prop === 'stroke' ? 'stroke' :
+                        prop === 'opacity' ? 'opacity' :
+                        prop === 'filter' ? 'filter' : prop;
+        
+        element.setAttribute(attrName, value);
+      }
+    }
+  }
+  
+  // Recursively process children
+  Array.from(element.children).forEach(child => {
+    applyStyleRules(child as SVGElement, styleRules);
+  });
+}
+
+/**
+ * Inlines styles from style attributes and CSS classes
+ * This function is called while elements are attached to the DOM so getComputedStyle works
  */
 function inlineStyles(element: SVGElement): void {
-  // This is a simplified version - in production you might want more sophisticated style inlining
-  // For now, we just ensure fill and stroke are inline
-  
-  // Inline styles from style attributes
-  // In a more sophisticated version, we'd parse and inline computed styles
-  if (element.hasAttribute('style')) {
-    // Keep the style attribute as-is for now
-  }
-
-  // Ensure fill and stroke are on the element directly if they're in style
+  // Get computed styles (works because element is attached to DOM)
   const computedStyle = window.getComputedStyle(element);
-  const fill = computedStyle.fill;
-  const stroke = computedStyle.stroke;
   
-  if (fill && fill !== 'none' && !element.hasAttribute('fill')) {
-    element.setAttribute('fill', fill);
+  // Handle fill - preserve URL references for gradients
+  const fill = computedStyle.fill;
+  if (fill && fill !== 'none' && fill !== 'rgba(0, 0, 0, 0)' && !element.hasAttribute('fill')) {
+    // Check if it's a URL reference (gradient/filter)
+    // getComputedStyle might return rgb() for gradients, so we need to check the actual style
+    const styleAttr = element.getAttribute('style') || '';
+    const classAttr = element.getAttribute('class') || '';
+    
+    // Try to preserve URL references from style attribute or class
+    if (styleAttr.includes('url(') || classAttr) {
+      // If element has a class, the fill might be from CSS - we'll keep the class
+      // and let the style block handle it, OR try to get the actual fill value
+      // For now, if computed fill is a color (not url), use it
+      if (fill.startsWith('rgb') || fill.startsWith('#') || /^[a-f0-9]{6}$/i.test(fill)) {
+        element.setAttribute('fill', fill);
+      }
+      // If it's a URL, the computed style might not show it - check style attribute
+      else if (styleAttr.match(/fill:\s*url\([^)]+\)/)) {
+        const urlMatch = styleAttr.match(/fill:\s*(url\([^)]+\))/);
+        if (urlMatch) {
+          element.setAttribute('fill', urlMatch[1]);
+        }
+      }
+    } else {
+      // No class/style, use computed fill
+      element.setAttribute('fill', fill);
+    }
   }
-  if (stroke && stroke !== 'none' && !element.hasAttribute('stroke')) {
+  
+  // Handle stroke
+  const stroke = computedStyle.stroke;
+  if (stroke && stroke !== 'none' && stroke !== 'rgba(0, 0, 0, 0)' && !element.hasAttribute('stroke')) {
     element.setAttribute('stroke', stroke);
+  }
+  
+  // Handle stroke-width if present
+  const strokeWidth = computedStyle.strokeWidth;
+  if (strokeWidth && strokeWidth !== '0px' && !element.hasAttribute('stroke-width')) {
+    element.setAttribute('stroke-width', strokeWidth);
+  }
+  
+  // Handle opacity
+  const opacity = computedStyle.opacity;
+  if (opacity && opacity !== '1' && !element.hasAttribute('opacity')) {
+    element.setAttribute('opacity', opacity);
   }
 
   // Recursively process children

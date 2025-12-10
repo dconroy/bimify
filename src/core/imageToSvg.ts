@@ -69,11 +69,11 @@ function rasterToSvg(img: HTMLImageElement, options: ConvertOptions): string {
 
   // Simple vectorization: create paths from image data
   // This is a simplified approach - for better quality, use a proper tracing library
-  const threshold = 128; // Alpha threshold for creating paths
+  const threshold = 10; // Lower threshold to capture more details (gradients, shadows)
 
   // Create a simple path by tracing the alpha channel
   // This is a very basic implementation - production would use more sophisticated algorithms
-  const svgPaths = traceImageData(imageData, threshold);
+  const { paths: svgPaths, regions } = traceImageData(imageData, threshold);
 
   // Create SVG structure with viewBox matching image dimensions
   // The normalizeSvg function will later scale it to 100x100 and add padding
@@ -87,10 +87,21 @@ function rasterToSvg(img: HTMLImageElement, options: ConvertOptions): string {
   if (svgPaths.length > 0) {
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     
-    for (const pathData of svgPaths) {
+    for (let i = 0; i < svgPaths.length; i++) {
+      const pathData = svgPaths[i];
+      const region = regions[i]; // We need to keep track of regions to sample color
+      
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', pathData);
-      path.setAttribute('fill', '#000000'); // Default black, will be adjusted
+      
+      // Sample color from the region
+      // We'll pick a few points inside the region and average their colors
+      const color = sampleRegionColor(imageData, region);
+      path.setAttribute('fill', color); 
+      // Add a small stroke to close gaps
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-width', '1');
+      
       group.appendChild(path);
     }
     
@@ -116,7 +127,7 @@ function rasterToSvg(img: HTMLImageElement, options: ConvertOptions): string {
  * This implementation uses a marching squares-like algorithm to trace contours
  * and create SVG paths from the image.
  */
-function traceImageData(imageData: ImageData, threshold: number): string[] {
+function traceImageData(imageData: ImageData, threshold: number): { paths: string[], regions: Array<Array<[number, number]>> } {
   const { width, height, data } = imageData;
   const paths: string[] = [];
 
@@ -150,6 +161,9 @@ function traceImageData(imageData: ImageData, threshold: number): string[] {
 
   // Convert contours to SVG paths
   // Simplify paths to reduce complexity
+  // We keep the original regions to sample colors later
+  const processedRegions: Array<Array<[number, number]>> = [];
+  
   for (const region of regions) {
     if (region.length < 3) continue; // Need at least 3 points for a path
     
@@ -164,33 +178,49 @@ function traceImageData(imageData: ImageData, threshold: number): string[] {
       }
       pathData += ' Z';
       paths.push(pathData);
+      processedRegions.push(region);
     }
   }
 
-  // If no paths were created (e.g., solid image), create a bounding rectangle
-  if (paths.length === 0) {
-    let minX = width, minY = height, maxX = 0, maxY = 0;
-    let hasContent = false;
+  return { paths, regions: processedRegions };
+}
 
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
-        if (binary[y] && binary[y][x]) {
-          hasContent = true;
-          minX = Math.min(minX, x);
-          minY = Math.min(minY, y);
-          maxX = Math.max(maxX, x);
-          maxY = Math.max(maxY, y);
-        }
-      }
-    }
+/**
+ * Samples the average color of a region from the image data
+ */
+function sampleRegionColor(imageData: ImageData, region: Array<[number, number]>): string {
+  if (!region || region.length === 0) return '#000000';
 
-    if (hasContent) {
-      const pathData = `M ${minX} ${minY} L ${maxX} ${minY} L ${maxX} ${maxY} L ${minX} ${maxY} Z`;
-      paths.push(pathData);
-    }
+  // Calculate bounding box of the region
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const [x, y] of region) {
+    minX = Math.min(minX, x);
+    minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x);
+    maxY = Math.max(maxY, y);
   }
 
-  return paths;
+  // Sample a few points within the bounding box
+  // A simple heuristic: sample the center point. 
+  // For better results, we'd check if the point is actually inside the polygon (ray casting)
+  // but for now, let's try the center of the bounding box.
+  
+  const centerX = Math.floor((minX + maxX) / 2);
+  const centerY = Math.floor((minY + maxY) / 2);
+  
+  const idx = (centerY * imageData.width + centerX) * 4;
+  
+  // Ensure we are within bounds
+  if (idx >= 0 && idx < imageData.data.length) {
+    const r = imageData.data[idx];
+    const g = imageData.data[idx + 1];
+    const b = imageData.data[idx + 2];
+    
+    // Convert to hex
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+  }
+  
+  return '#333333';
 }
 
 /**
