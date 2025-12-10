@@ -93,6 +93,23 @@ export function Footer() {
       </div>
 
       <div className="footer-bottom">
+        <div className="footer-github">
+          <a 
+            href="https://github.com/dconroy" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="github-profile-link"
+          >
+            <img 
+              src="https://github.com/dconroy.png" 
+              alt="dconroy"
+              className="github-avatar"
+              width="32"
+              height="32"
+            />
+            <span>Built by dconroy</span>
+          </a>
+        </div>
         <p>
           VerifyBIMI - Convert and validate logos for Brand Indicators for Message Identification (BIMI) compliance
         </p>

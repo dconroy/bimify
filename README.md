@@ -76,8 +76,10 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 **Quick setup:**
 1. Push your code to GitHub
 2. Enable GitHub Pages in repository settings (Source: GitHub Actions)
-3. Configure DNS for custom domain `verifybimi.com` (see DEPLOYMENT.md)
+3. Configure DNS for custom domain `verifybimi.com` (see [DNS_SETUP.md](./DNS_SETUP.md))
 4. Your app will be live at `https://verifybimi.com`
+
+**DNS Configuration:** See [DNS_SETUP.md](./DNS_SETUP.md) for step-by-step DNS setup instructions.
 
 The repository includes:
 - Automated GitHub Actions workflow that deploys on every push to `main`

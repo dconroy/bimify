@@ -50,11 +50,10 @@ This repository is configured for the custom domain **verifybimi.com**.
 1. **CNAME file is already included** in `public/CNAME` with `verifybimi.com`
 
 2. **Configure DNS** for your domain:
-   - Add a `CNAME` record pointing to your GitHub Pages domain:
-     - **Type**: CNAME
-     - **Name**: @ (or root domain)
-     - **Value**: `YOUR_USERNAME.github.io` (replace with your GitHub username)
-   - Alternatively, use A records (see GitHub Pages documentation for IP addresses)
+   - See [DNS_SETUP.md](./DNS_SETUP.md) for detailed step-by-step DNS configuration instructions
+   - You'll need to add either:
+     - A CNAME record pointing to `YOUR_USERNAME.github.io`, OR
+     - Four A records with GitHub Pages IP addresses
 
 3. **Enable custom domain in GitHub**:
    - Go to repository **Settings** → **Pages**
