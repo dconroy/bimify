@@ -109,9 +109,20 @@ export function Footer() {
             />
             <span>Built by dconroy</span>
           </a>
+          <a
+            href="https://github.com/dconroy/verifybimi.com/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="github-issues-link"
+          >
+            Report an issue
+          </a>
         </div>
         <p>
           VerifyBIMI - Free browser-based BIMI logo converter and validator
+        </p>
+        <p className="footer-privacy">
+          <strong>Privacy:</strong> Your files are processed locally in your browser. We don’t upload your logo to a server.
         </p>
         <p className="footer-copyright">
           © {new Date().getFullYear()} VerifyBIMI. Open source.
