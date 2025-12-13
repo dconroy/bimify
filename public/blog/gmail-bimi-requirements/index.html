@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Gmail BIMI Requirements - Why Your Logo Isn’t Showing (Checklist)</title>
+    <meta
+      name="description"
+      content="Gmail BIMI requirements checklist: DMARC enforcement, alignment, SVG Tiny 1.2 logo rules, VMC considerations, and common reasons logos don’t appear."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://verifybimi.com/blog/gmail-bimi-requirements/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://verifybimi.com/blog/gmail-bimi-requirements/" />
+    <meta property="og:title" content="Gmail BIMI requirements (overview)" />
+    <meta
+      property="og:description"
+      content="Checklist: DMARC enforcement, alignment, SVG Tiny 1.2 rules, VMC considerations, and common reasons logos don’t appear."
+    />
+    <meta property="og:image" content="https://verifybimi.com/logo.png" />
+    <meta property="og:image:alt" content="VerifyBIMI logo" />
+    <meta property="og:site_name" content="VerifyBIMI" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Gmail BIMI requirements (overview)" />
+    <meta
+      property="twitter:description"
+      content="Checklist: DMARC enforcement, alignment, SVG Tiny 1.2 rules, VMC considerations, and common reasons logos don’t appear."
+    />
+    <meta property="twitter:image" content="https://verifybimi.com/logo.png" />
+
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c9cff;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        background: radial-gradient(1200px 700px at 20% 0%, rgba(124, 156, 255, 0.25), transparent 60%),
+          radial-gradient(900px 600px at 80% 10%, rgba(123, 255, 208, 0.15), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        line-height: 1.65;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: 36px;
+        line-height: 1.15;
+        margin: 18px 0 10px;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 18px;
+        margin: 0 0 18px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px 18px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 26px 0 10px;
+      }
+      ul {
+        margin: 10px 0 0 18px;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.95em;
+      }
+      footer {
+        margin-top: 34px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        font-size: 14px;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        padding: 2px 6px;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--text);
+      }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Gmail BIMI requirements (overview)",
+        "description": "Gmail BIMI requirements checklist: DMARC enforcement, alignment, SVG Tiny 1.2 logo rules, VMC considerations, and common reasons logos don’t appear.",
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://verifybimi.com/blog/gmail-bimi-requirements/" },
+        "author": { "@type": "Organization", "name": "VerifyBIMI" },
+        "publisher": { "@type": "Organization", "name": "VerifyBIMI" }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">VerifyBIMI</div>
+        <a class="pill" href="../../" aria-label="Back to the BIMI logo converter">
+          <span>Back to the converter</span>
+          <span class="kbd">/</span>
+        </a>
+      </header>
+
+      <main>
+        <h1>Gmail BIMI requirements (overview)</h1>
+        <p class="lede">
+          If your BIMI logo isn’t showing in Gmail, the issue is usually one of: <strong>DMARC enforcement</strong>,
+          <strong>alignment</strong>, or a non-compliant <strong>SVG</strong>.
+        </p>
+
+        <div class="card">
+          <p style="margin-top: 0">
+            Start here: confirm your DMARC policy is enforced (<code>p=quarantine</code> or <code>p=reject</code>), then
+            validate your SVG against SVG Tiny 1.2 constraints.
+          </p>
+        </div>
+
+        <h2 id="checklist">Checklist</h2>
+        <ul>
+          <li><strong>DMARC:</strong> enforced policy (<code>p=quarantine</code> or <code>p=reject</code>).</li>
+          <li><strong>Alignment:</strong> SPF and/or DKIM should align with the From domain.</li>
+          <li><strong>Passing auth:</strong> SPF and DKIM should pass consistently for legitimate traffic.</li>
+          <li><strong>BIMI record:</strong> <code>default._bimi</code> TXT exists and points to your hosted SVG (and optional VMC).</li>
+          <li><strong>SVG:</strong> compatible with SVG Tiny 1.2, square framing, no embedded raster images.</li>
+        </ul>
+
+        <h2 id="common-reasons">Common reasons logos don’t appear</h2>
+        <ul>
+          <li><strong>DMARC is monitor-only:</strong> <code>p=none</code>.</li>
+          <li><strong>Misalignment:</strong> mail is sent via a subdomain or third party without alignment.</li>
+          <li><strong>SVG contains an embedded PNG/JPG:</strong> <code>&lt;image&gt;</code> element or base64 payload.</li>
+          <li><strong>Propagation/time:</strong> it can take time for providers to pick up changes.</li>
+        </ul>
+
+        <p>
+          Next: validate the logo against <a href="../bimi-logo-requirements/">BIMI SVG requirements</a> and review
+          <a href="../bimi-dns-record-examples/">BIMI DNS record examples</a>.
+        </p>
+      </main>
+
+      <footer>
+        <div><a href="../">← Back to all guides</a></div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+

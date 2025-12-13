@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Does BIMI Improve Deliverability? (What It Changes, What It Doesn’t)</title>
+    <meta
+      name="description"
+      content="Does BIMI improve deliverability? BIMI is mainly a display/trust signal; enforced authentication (SPF/DKIM/DMARC) is what impacts abuse and reputation."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://verifybimi.com/blog/does-bimi-improve-deliverability/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://verifybimi.com/blog/does-bimi-improve-deliverability/" />
+    <meta property="og:title" content="Does BIMI improve deliverability?" />
+    <meta
+      property="og:description"
+      content="BIMI is mainly a display/trust signal; enforced authentication (SPF/DKIM/DMARC) is what impacts abuse and reputation."
+    />
+    <meta property="og:image" content="https://verifybimi.com/logo.png" />
+    <meta property="og:image:alt" content="VerifyBIMI logo" />
+    <meta property="og:site_name" content="VerifyBIMI" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Does BIMI improve deliverability?" />
+    <meta
+      property="twitter:description"
+      content="BIMI is mainly a display/trust signal; enforced authentication (SPF/DKIM/DMARC) is what impacts abuse and reputation."
+    />
+    <meta property="twitter:image" content="https://verifybimi.com/logo.png" />
+
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c9cff;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        background: radial-gradient(1200px 700px at 20% 0%, rgba(124, 156, 255, 0.25), transparent 60%),
+          radial-gradient(900px 600px at 80% 10%, rgba(123, 255, 208, 0.15), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        line-height: 1.65;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: 36px;
+        line-height: 1.15;
+        margin: 18px 0 10px;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 18px;
+        margin: 0 0 18px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px 18px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 26px 0 10px;
+      }
+      ul {
+        margin: 10px 0 0 18px;
+      }
+      footer {
+        margin-top: 34px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        font-size: 14px;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        padding: 2px 6px;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--text);
+      }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Does BIMI improve deliverability?",
+        "description": "Does BIMI improve deliverability? BIMI is mainly a display/trust signal; enforced authentication (SPF/DKIM/DMARC) is what impacts abuse and reputation.",
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://verifybimi.com/blog/does-bimi-improve-deliverability/" },
+        "author": { "@type": "Organization", "name": "VerifyBIMI" },
+        "publisher": { "@type": "Organization", "name": "VerifyBIMI" }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">VerifyBIMI</div>
+        <a class="pill" href="../../" aria-label="Back to the BIMI logo converter">
+          <span>Back to the converter</span>
+          <span class="kbd">/</span>
+        </a>
+      </header>
+
+      <main>
+        <h1>Does BIMI improve deliverability?</h1>
+        <p class="lede">
+          <strong>Usually not directly.</strong> BIMI is mainly a display/trust feature. The deliverability “work” comes
+          from the prerequisites: SPF, DKIM, and an enforced DMARC policy.
+        </p>
+
+        <div class="card">
+          <p style="margin-top: 0">
+            <strong>Good mental model:</strong> DMARC enforcement helps reduce spoofing and abuse. BIMI is the visible
+            reward that some inboxes show when you’ve done the hard part.
+          </p>
+        </div>
+
+        <h2 id="direct">Does BIMI itself change inbox placement?</h2>
+        <p>
+          Mailbox providers generally do not promise better placement purely because BIMI is present. It’s not an
+          authentication protocol and it doesn’t change how spam filters score content.
+        </p>
+
+        <h2 id="indirect">How it can help indirectly</h2>
+        <ul>
+          <li><strong>Authentication maturity:</strong> enforcing DMARC improves your security posture and reduces impersonation.</li>
+          <li><strong>Engagement:</strong> a recognizable logo may increase opens and trust for some audiences.</li>
+          <li><strong>Operational discipline:</strong> teams that implement BIMI often improve monitoring and alignment.</li>
+        </ul>
+
+        <h2 id="what-to-measure">What to measure after rollout</h2>
+        <ul>
+          <li>Open/click rate changes (segment by mailbox provider if possible).</li>
+          <li>Spam complaint rate and user-reported phishing attempts.</li>
+          <li>DMARC aggregate reports (alignment and policy impacts).</li>
+        </ul>
+
+        <p>
+          Next: read <a href="../bimi-vs-dmarc/">BIMI vs DMARC</a> or validate your logo against
+          <a href="../bimi-logo-requirements/">BIMI SVG requirements</a>.
+        </p>
+      </main>
+
+      <footer>
+        <div><a href="../">← Back to all guides</a></div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+

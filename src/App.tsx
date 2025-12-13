@@ -14,11 +14,41 @@ import './App.css';
 
 function App() {
   // Simple path-based view switch (no router). This also acts as a safety net if hosting falls back to index.html.
-  if (typeof window !== 'undefined' && window.location.pathname.includes('/what-is-bimi')) {
-    return <BimiInfoPage />;
+  if (typeof window !== 'undefined') {
+    const pathname = window.location.pathname;
+
+    // If hosting falls back to index.html for unknown routes, redirect to the real static blog pages.
+    // (Vite serves /public/blog/* at /blog/*, but some hosts may still load the SPA for /blog/... paths.)
+    if (pathname.includes('/blog')) {
+      const baseUrl = import.meta.env.BASE_URL || '/';
+
+      // Avoid redirect loops if we're already on a concrete static HTML file.
+      if (!pathname.endsWith('.html')) {
+        // Normalize:
+        // - /blog or /blog/                -> /blog/index.html
+        // - /blog/some-post or /blog/some-post/ -> /blog/some-post/index.html
+        const blogRootMatch = pathname.match(/\/blog\/?$/);
+        if (blogRootMatch) {
+          window.location.replace(`${baseUrl}blog/index.html`);
+          return null;
+        }
+
+        const blogPostMatch = pathname.match(/\/blog\/([^/]+)\/?$/);
+        if (blogPostMatch?.[1]) {
+          const slug = blogPostMatch[1];
+          window.location.replace(`${baseUrl}blog/${slug}/index.html`);
+          return null;
+        }
+      }
+    }
+
+    if (pathname.includes('/what-is-bimi')) {
+      return <BimiInfoPage />;
+    }
   }
 
   const guideHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
+  const blogHref = `${import.meta.env.BASE_URL}blog/`;
 
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [originalPreview, setOriginalPreview] = useState<string | null>(null);
@@ -134,6 +164,9 @@ function App() {
         <div className="app-header-actions">
           <a className="header-cta" href={guideHref}>
             What is BIMI? Read the guide
+          </a>
+          <a className="header-cta" href={blogHref}>
+            Guides
           </a>
         </div>
       </header>

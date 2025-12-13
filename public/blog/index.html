@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>VerifyBIMI Guides - BIMI Setup, SVG Requirements, DNS Records, and VMCs</title>
+    <meta
+      name="description"
+      content="Practical BIMI guides: logo SVG requirements (SVG Tiny 1.2), BIMI DNS record examples, VMCs, deliverability, and mailbox-provider requirements."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://verifybimi.com/blog/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://verifybimi.com/blog/" />
+    <meta property="og:title" content="VerifyBIMI Guides" />
+    <meta
+      property="og:description"
+      content="Practical BIMI guides: logo SVG requirements, BIMI DNS record examples, VMCs, deliverability, and provider requirements."
+    />
+    <meta property="og:image" content="https://verifybimi.com/logo.png" />
+    <meta property="og:image:alt" content="VerifyBIMI logo" />
+    <meta property="og:site_name" content="VerifyBIMI" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="VerifyBIMI Guides" />
+    <meta
+      property="twitter:description"
+      content="Practical BIMI guides: logo SVG requirements, BIMI DNS record examples, VMCs, deliverability, and provider requirements."
+    />
+    <meta property="twitter:image" content="https://verifybimi.com/logo.png" />
+
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c9cff;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        background: radial-gradient(1200px 700px at 20% 0%, rgba(124, 156, 255, 0.25), transparent 60%),
+          radial-gradient(900px 600px at 80% 10%, rgba(123, 255, 208, 0.15), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        line-height: 1.6;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: 34px;
+        line-height: 1.15;
+        margin: 18px 0 10px;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 18px;
+        margin: 0 0 22px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      @media (min-width: 840px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px 18px;
+      }
+      .title {
+        font-weight: 760;
+        letter-spacing: 0.2px;
+        margin: 0 0 6px;
+      }
+      .meta {
+        color: var(--muted);
+        margin: 0;
+        font-size: 14px;
+      }
+      footer {
+        margin-top: 32px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        font-size: 14px;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        padding: 2px 6px;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--text);
+      }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "VerifyBIMI Guides",
+        "url": "https://verifybimi.com/blog/",
+        "isPartOf": { "@type": "WebSite", "name": "VerifyBIMI", "url": "https://verifybimi.com/" }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">VerifyBIMI</div>
+        <a class="pill" href="../" aria-label="Back to the BIMI logo converter">
+          <span>Back to the converter</span>
+          <span class="kbd">/</span>
+        </a>
+      </header>
+
+      <main>
+        <h1>Guides</h1>
+        <p class="lede">
+          Short, practical pages that answer the “what do I do next?” questions that come up when implementing BIMI.
+        </p>
+
+        <div class="grid" aria-label="BIMI guides">
+          <a class="card" href="./bimi-logo-requirements/">
+            <div class="title">BIMI logo requirements (SVG Tiny 1.2)</div>
+            <p class="meta">What your SVG must include (and what must be removed) to be BIMI-compatible.</p>
+          </a>
+          <a class="card" href="./bimi-dns-record-examples/">
+            <div class="title">BIMI DNS record examples</div>
+            <p class="meta">Common BIMI TXT record patterns and troubleshooting tips.</p>
+          </a>
+          <a class="card" href="./do-you-need-a-vmc/">
+            <div class="title">Do you need a VMC for BIMI?</div>
+            <p class="meta">When a Verified Mark Certificate matters, when it doesn’t, and why.</p>
+          </a>
+          <a class="card" href="./does-bimi-improve-deliverability/">
+            <div class="title">Does BIMI improve deliverability?</div>
+            <p class="meta">What BIMI changes (and what it does not) for inbox placement and engagement.</p>
+          </a>
+          <a class="card" href="./bimi-vs-dmarc/">
+            <div class="title">BIMI vs DMARC (and SPF/DKIM)</div>
+            <p class="meta">How the pieces fit together, and what “DMARC enforcement” actually means.</p>
+          </a>
+          <a class="card" href="./gmail-bimi-requirements/">
+            <div class="title">Gmail BIMI requirements (overview)</div>
+            <p class="meta">A provider-focused checklist for “why isn’t my logo showing in Gmail?”</p>
+          </a>
+          <a class="card" href="./yahoo-bimi-requirements/">
+            <div class="title">Yahoo BIMI requirements (overview)</div>
+            <p class="meta">A provider-focused checklist for Yahoo/AOL-style requirements and gotchas.</p>
+          </a>
+          <a class="card" href="../what-is-bimi/">
+            <div class="title">What is BIMI? (full guide)</div>
+            <p class="meta">Longer explanation: what BIMI is, why it exists, and a high-level setup path.</p>
+          </a>
+        </div>
+      </main>
+
+      <footer>
+        <div>
+          Want to validate your logo right now? Go to <a href="../">verifybimi.com</a> and upload your SVG.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+

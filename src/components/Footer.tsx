@@ -1,5 +1,6 @@
 export function Footer() {
   const infoHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
+  const blogHref = `${import.meta.env.BASE_URL}blog/`;
 
   return (
     <footer className="app-footer">
@@ -14,6 +15,11 @@ export function Footer() {
             <li>
               <a href={infoHref}>
                 What is BIMI? (Guide)
+              </a>
+            </li>
+            <li>
+              <a href={blogHref}>
+                Guides
               </a>
             </li>
           </ul>

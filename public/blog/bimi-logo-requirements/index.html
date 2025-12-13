@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>BIMI Logo Requirements (SVG Tiny 1.2) - Checklist + Common Failures</title>
+    <meta
+      name="description"
+      content="A practical BIMI logo checklist: SVG Tiny 1.2, square aspect ratio, no embedded raster images, safe background, and common validation failures."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://verifybimi.com/blog/bimi-logo-requirements/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://verifybimi.com/blog/bimi-logo-requirements/" />
+    <meta property="og:title" content="BIMI logo requirements (SVG Tiny 1.2)" />
+    <meta
+      property="og:description"
+      content="A practical BIMI logo checklist: SVG Tiny 1.2, square aspect ratio, no embedded raster images, and common validation failures."
+    />
+    <meta property="og:image" content="https://verifybimi.com/logo.png" />
+    <meta property="og:image:alt" content="VerifyBIMI logo" />
+    <meta property="og:site_name" content="VerifyBIMI" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="BIMI logo requirements (SVG Tiny 1.2)" />
+    <meta
+      property="twitter:description"
+      content="A practical BIMI logo checklist: SVG Tiny 1.2, square aspect ratio, no embedded raster images, and common validation failures."
+    />
+    <meta property="twitter:image" content="https://verifybimi.com/logo.png" />
+
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c9cff;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        background: radial-gradient(1200px 700px at 20% 0%, rgba(124, 156, 255, 0.25), transparent 60%),
+          radial-gradient(900px 600px at 80% 10%, rgba(123, 255, 208, 0.15), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        line-height: 1.65;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: 36px;
+        line-height: 1.15;
+        margin: 18px 0 10px;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 18px;
+        margin: 0 0 18px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px 18px;
+      }
+      .toc {
+        margin-top: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 14px 16px;
+      }
+      .toc-title {
+        font-weight: 750;
+        letter-spacing: 0.2px;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .toc ul {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 6px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 26px 0 10px;
+      }
+      ul {
+        margin: 10px 0 0 18px;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.95em;
+      }
+      .cta {
+        margin-top: 18px;
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 12px;
+      }
+      footer {
+        margin-top: 34px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        font-size: 14px;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        padding: 2px 6px;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--text);
+      }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "BIMI logo requirements (SVG Tiny 1.2)",
+        "description": "A practical BIMI logo checklist: SVG Tiny 1.2, square aspect ratio, no embedded raster images, safe background, and common validation failures.",
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://verifybimi.com/blog/bimi-logo-requirements/" },
+        "author": { "@type": "Organization", "name": "VerifyBIMI" },
+        "publisher": { "@type": "Organization", "name": "VerifyBIMI" }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">VerifyBIMI</div>
+        <a class="pill" href="../../" aria-label="Back to the BIMI logo converter">
+          <span>Back to the converter</span>
+          <span class="kbd">/</span>
+        </a>
+      </header>
+
+      <main>
+        <h1>BIMI logo requirements (SVG Tiny 1.2)</h1>
+        <p class="lede">
+          BIMI logos are “just SVG”… but they must follow a constrained subset (<strong>SVG Tiny 1.2</strong>) and a few
+          mailbox-provider safety rules.
+        </p>
+
+        <div class="card">
+          <p>
+            If you already have an SVG from your designer, the fastest path is to upload it to the converter and see
+            what fails.
+          </p>
+          <a class="cta" href="../../" aria-label="Open the BIMI SVG validator">
+            <strong>Validate your SVG now</strong>
+            <span class="kbd">→</span>
+          </a>
+        </div>
+
+        <nav class="toc" aria-label="On this page">
+          <div class="toc-title">On this page</div>
+          <ul>
+            <li><a href="#core">Core checklist (what usually matters)</a></li>
+            <li><a href="#no-raster">No embedded raster images</a></li>
+            <li><a href="#bg">Solid background and safe zone</a></li>
+            <li><a href="#cleanup">SVG cleanup rules (security + compatibility)</a></li>
+            <li><a href="#common-fails">Most common failure modes</a></li>
+          </ul>
+        </nav>
+
+        <h2 id="core">Core checklist (what usually matters)</h2>
+        <ul>
+          <li><strong>SVG Tiny 1.2:</strong> your SVG must be compatible with the Tiny 1.2 profile (limited features).</li>
+          <li><strong>Square aspect:</strong> your rendered view should be 1:1 (the logo sits inside a square frame).</li>
+          <li><strong>Vector-only:</strong> no embedded bitmaps (no PNG/JPG data inside the SVG).</li>
+          <li><strong>Safe background:</strong> BIMI logos are commonly expected to render against a solid background.</li>
+          <li><strong>Clean structure:</strong> no scripts, no external CSS, no remote references.</li>
+          <li><strong>Accessibility:</strong> include a <code>&lt;title&gt;</code> element.</li>
+        </ul>
+
+        <h2 id="no-raster">No embedded raster images</h2>
+        <p>
+          A surprisingly common issue is an SVG that contains an <code>&lt;image&gt;</code> element or a base64 data URL.
+          That means it’s not truly vector, and many validators (and mailbox providers) will reject it.
+        </p>
+        <p>What to do:</p>
+        <ul>
+          <li>Ask for the “real” vector original from the designer (AI/EPS/SVG with vector paths).</li>
+          <li>If the logo is inherently raster, re-create it as vector (manual tracing is usually better than auto-trace).</li>
+        </ul>
+
+        <h2 id="bg">Solid background and safe zone</h2>
+        <p>
+          In inbox UI, logos are shown small and often clipped into shapes. A background color and a safe padding zone
+          keeps the mark readable.
+        </p>
+        <ul>
+          <li><strong>Background:</strong> choose a solid color that matches brand guidelines.</li>
+          <li><strong>Padding:</strong> center the mark with enough breathing room (avoid edge-to-edge artwork).</li>
+        </ul>
+
+        <h2 id="cleanup">SVG cleanup rules (security + compatibility)</h2>
+        <p>Keep the SVG boring:</p>
+        <ul>
+          <li>Remove <code>&lt;script&gt;</code> and event handlers.</li>
+          <li>Avoid external references (<code>href</code> pointing to remote URLs).</li>
+          <li>Prefer inline styles or attributes over complex CSS features.</li>
+          <li>Flatten filters/masks if they cause validation issues (many “fancy” effects are not Tiny-safe).</li>
+        </ul>
+
+        <h2 id="common-fails">Most common failure modes</h2>
+        <ul>
+          <li><strong>Embedded image:</strong> an <code>&lt;image&gt;</code> element or base64 bitmap payload.</li>
+          <li><strong>Non-square framing:</strong> viewBox or dimensions produce a rectangle.</li>
+          <li><strong>Unsupported elements:</strong> filters, patterns, or other features outside SVG Tiny 1.2.</li>
+          <li><strong>Transparency assumptions:</strong> logo needs a solid background for consistent inbox rendering.</li>
+        </ul>
+
+        <p>
+          Next: see <a href="../bimi-dns-record-examples/">BIMI DNS record examples</a> or
+          <a href="../do-you-need-a-vmc/">whether you need a VMC</a>.
+        </p>
+      </main>
+
+      <footer>
+        <div><a href="../">← Back to all guides</a></div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>BIMI vs DMARC vs SPF/DKIM - How Email Authentication Fits Together</title>
+    <meta
+      name="description"
+      content="BIMI vs DMARC vs SPF/DKIM: what each does, why BIMI depends on enforced DMARC, and how alignment affects BIMI eligibility."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://verifybimi.com/blog/bimi-vs-dmarc/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://verifybimi.com/blog/bimi-vs-dmarc/" />
+    <meta property="og:title" content="BIMI vs DMARC (and SPF/DKIM)" />
+    <meta
+      property="og:description"
+      content="What each does, why BIMI depends on enforced DMARC, and how alignment affects BIMI eligibility."
+    />
+    <meta property="og:image" content="https://verifybimi.com/logo.png" />
+    <meta property="og:image:alt" content="VerifyBIMI logo" />
+    <meta property="og:site_name" content="VerifyBIMI" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="BIMI vs DMARC (and SPF/DKIM)" />
+    <meta
+      property="twitter:description"
+      content="What each does, why BIMI depends on enforced DMARC, and how alignment affects BIMI eligibility."
+    />
+    <meta property="twitter:image" content="https://verifybimi.com/logo.png" />
+
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c9cff;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        background: radial-gradient(1200px 700px at 20% 0%, rgba(124, 156, 255, 0.25), transparent 60%),
+          radial-gradient(900px 600px at 80% 10%, rgba(123, 255, 208, 0.15), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        line-height: 1.65;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: 36px;
+        line-height: 1.15;
+        margin: 18px 0 10px;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 18px;
+        margin: 0 0 18px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px 18px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 26px 0 10px;
+      }
+      ul {
+        margin: 10px 0 0 18px;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.95em;
+      }
+      footer {
+        margin-top: 34px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        font-size: 14px;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        padding: 2px 6px;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--text);
+      }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "BIMI vs DMARC (and SPF/DKIM)",
+        "description": "BIMI vs DMARC vs SPF/DKIM: what each does, why BIMI depends on enforced DMARC, and how alignment affects BIMI eligibility.",
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://verifybimi.com/blog/bimi-vs-dmarc/" },
+        "author": { "@type": "Organization", "name": "VerifyBIMI" },
+        "publisher": { "@type": "Organization", "name": "VerifyBIMI" }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">VerifyBIMI</div>
+        <a class="pill" href="../../" aria-label="Back to the BIMI logo converter">
+          <span>Back to the converter</span>
+          <span class="kbd">/</span>
+        </a>
+      </header>
+
+      <main>
+        <h1>BIMI vs DMARC (and SPF/DKIM)</h1>
+        <p class="lede">
+          BIMI doesn’t authenticate mail. It depends on <strong>SPF</strong>, <strong>DKIM</strong>, and an enforced
+          <strong>DMARC</strong> policy. Think of BIMI as “branding on top of strong authentication.”
+        </p>
+
+        <div class="card">
+          <p style="margin-top: 0">
+            <strong>Eligibility shortcut:</strong> if your DMARC policy is <code>p=none</code>, you’re typically not
+            eligible for BIMI display. You’ll need <code>p=quarantine</code> or <code>p=reject</code>.
+          </p>
+        </div>
+
+        <h2 id="spf">SPF: who is allowed to send?</h2>
+        <p>
+          SPF is a DNS policy that lists sending IPs/hosts for a domain. It helps receivers decide whether a source is
+          allowed to send mail for that domain.
+        </p>
+
+        <h2 id="dkim">DKIM: did the message get altered?</h2>
+        <p>
+          DKIM signs parts of the message. Receivers verify the signature using a public key published in DNS. This
+          helps detect tampering and provides domain-level accountability.
+        </p>
+
+        <h2 id="dmarc">DMARC: enforce alignment + policy</h2>
+        <p>
+          DMARC ties SPF/DKIM results to the visible From domain via alignment rules, then publishes a policy telling
+          receivers what to do with failures.
+        </p>
+        <ul>
+          <li><strong>p=none:</strong> monitor only (no enforcement)</li>
+          <li><strong>p=quarantine:</strong> treat failures as suspicious</li>
+          <li><strong>p=reject:</strong> reject failures</li>
+        </ul>
+
+        <h2 id="bimi">BIMI: show a verified brand logo (where supported)</h2>
+        <p>
+          BIMI publishes a DNS record that points to a validated SVG logo (and optionally a VMC). Some mailbox
+          providers show the logo when authentication passes and policies are enforced.
+        </p>
+
+        <p>
+          Next: publish a <a href="../bimi-dns-record-examples/">BIMI DNS record</a> and validate your SVG against
+          <a href="../bimi-logo-requirements/">BIMI logo requirements</a>.
+        </p>
+      </main>
+
+      <footer>
+        <div><a href="../">← Back to all guides</a></div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+
