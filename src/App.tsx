@@ -5,7 +5,6 @@ import { OriginalPreview } from './components/OriginalPreview';
 import { PreviewPanel } from './components/PreviewPanel';
 import { EmailPreview } from './components/EmailPreview';
 import { ValidationPanel } from './components/ValidationPanel';
-import { PaymentGate } from './components/PaymentGate';
 import { Footer } from './components/Footer';
 import { BimiInfoPage } from './components/BimiInfoPage';
 import { convertToBimiSvg } from './core';
@@ -28,7 +27,6 @@ function App() {
   const [isConverting, setIsConverting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSvgSource, setIsSvgSource] = useState<boolean | null>(null);
-  const [hasPaid, setHasPaid] = useState(false);
   const [options, setOptions] = useState<ConvertOptions>({
     backgroundColor: '#FFFFFF',
     shape: 'circle',
@@ -102,27 +100,6 @@ function App() {
     }
   }, []);
 
-  // Check for payment success on mount
-  useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('paid') === 'true') {
-      setHasPaid(true);
-      // Clean up URL
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-  });
-
-  const handlePaymentStart = useCallback(() => {
-    // TODO: Replace with your actual Stripe Payment Link
-    // Example: window.location.href = 'https://buy.stripe.com/test_...';
-    
-    // For demo purposes, we'll simulate a redirect and return
-    const confirm = window.confirm("This would redirect to Stripe for a $1.00 payment.\n\nClick OK to simulate a successful payment.");
-    if (confirm) {
-      setHasPaid(true);
-    }
-  }, []);
-
   const handleConvert = useCallback(async () => {
     if (!originalFile) return;
     await processFile(originalFile, options);
@@ -191,13 +168,9 @@ function App() {
 
             <PreviewPanel 
               bimiSvg={bimiSvg}
-              onDownload={hasPaid ? handleDownloadSvg : undefined}
-              onCopy={hasPaid ? handleCopySvg : undefined}
+              onDownload={handleDownloadSvg}
+              onCopy={handleCopySvg}
             />
-            
-            {bimiSvg && !hasPaid && (
-              <PaymentGate onPaymentStart={handlePaymentStart} />
-            )}
           </div>
 
           <EmailPreview bimiSvg={bimiSvg} companyName={options.title || 'Your Company'} />

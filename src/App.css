@@ -643,7 +643,7 @@ body {
 
 .preview-light {
   background: white;
-  border: 1px solid var(--border-color);
+  /* Border is already provided by .preview-container */
 }
 
 /* Subtle stroke to show white shapes on white bg */
@@ -657,7 +657,7 @@ body {
 
 .preview-dark {
   background: #1e1e1e;
-  border: 1px solid #333;
+  /* Border is already provided by .preview-container */
 }
 
 .preview-placeholder {
@@ -879,70 +879,6 @@ body {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-color);
-}
-
-/* Payment Gate */
-.payment-gate {
-  margin-top: 1.5rem;
-  background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
-  border: 1px solid #fee2e2;
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.payment-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.payment-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.payment-gate h3 {
-  margin: 0;
-  color: var(--text-main);
-  font-size: 1.25rem;
-}
-
-.payment-gate p {
-  color: var(--text-muted);
-  margin: 0;
-  max-width: 400px;
-}
-
-.pay-button {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
-  width: 100%;
-  max-width: 300px;
-}
-
-.pay-button:hover {
-  background: #059669;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.4);
-}
-
-.payment-secure {
-  font-size: 0.875rem;
-  color: #6b7280;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 /* Email Preview */
