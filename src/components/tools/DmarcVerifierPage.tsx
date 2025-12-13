@@ -3,6 +3,7 @@ import { Footer } from '../Footer';
 import '../../App.css';
 import { DOH_RESOLVERS, getDefaultResolver, dohLookupTxt } from '../../utils/doh';
 import { dmarcQname, parseDmarcRecord, pickLikelyDmarcRecord } from '../../utils/dmarc';
+import { trackDnsCheck } from '../../utils/analytics';
 
 function isOnDmarcToolPath(pathname: string): boolean {
   return pathname.includes('/tools/dmarc');
@@ -89,6 +90,7 @@ export function DmarcVerifierPage() {
       const res = await dohLookupTxt(qname, resolver);
       if (res.error) {
         setError(res.error);
+        trackDnsCheck('dmarc', 'error', { domain, error: res.error });
         return;
       }
 
@@ -98,9 +100,11 @@ export function DmarcVerifierPage() {
       const picked = pickLikelyDmarcRecord(txt);
       if (!picked) {
         setError(`No TXT records found for ${qname}.`);
+        trackDnsCheck('dmarc', 'no_record', { domain });
         return;
       }
       setSelectedRecord(picked);
+      trackDnsCheck('dmarc', 'success', { domain });
     } finally {
       setIsLoading(false);
     }

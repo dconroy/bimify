@@ -112,3 +112,18 @@ export function trackDownload(downloadType: 'svg' | 'report' | 'clipboard'): voi
   });
 }
 
+/**
+ * Track DNS check
+ */
+export function trackDnsCheck(
+  tool: 'bimi' | 'dmarc' | 'spf_dkim',
+  status: 'success' | 'error' | 'no_record',
+  details?: Record<string, string | number | boolean>
+): void {
+  trackEvent('dns_check', {
+    tool,
+    status,
+    ...details,
+  });
+}
+

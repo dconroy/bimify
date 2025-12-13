@@ -3,6 +3,7 @@ import { Footer } from '../Footer';
 import '../../App.css';
 import { DOH_RESOLVERS, getDefaultResolver, dohLookupTxt } from '../../utils/doh';
 import { bimiQname, parseBimiRecord, pickLikelyBimiRecord } from '../../utils/bimi';
+import { trackDnsCheck } from '../../utils/analytics';
 
 function isOnBimiToolPath(pathname: string): boolean {
   return pathname.includes('/tools/bimi');
@@ -84,6 +85,7 @@ export function BimiCheckerPage() {
       const res = await dohLookupTxt(qname, resolver);
       if (res.error) {
         setError(res.error);
+        trackDnsCheck('bimi', 'error', { domain, error: res.error });
         return;
       }
 
@@ -93,9 +95,11 @@ export function BimiCheckerPage() {
       const picked = pickLikelyBimiRecord(txt);
       if (!picked) {
         setError(`No BIMI TXT records found for ${qname}.`);
+        trackDnsCheck('bimi', 'no_record', { domain });
         return;
       }
       setSelectedRecord(picked);
+      trackDnsCheck('bimi', 'success', { domain });
     } finally {
       setIsLoading(false);
     }

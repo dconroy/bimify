@@ -4,6 +4,7 @@ import '../../App.css';
 import { DOH_RESOLVERS, getDefaultResolver, dohLookupTxt } from '../../utils/doh';
 import { spfQname, parseSpfRecord, pickLikelySpfRecord } from '../../utils/spf';
 import { dkimQname, parseDkimRecord, pickLikelyDkimRecord, COMMON_DKIM_SELECTORS } from '../../utils/dkim';
+import { trackDnsCheck } from '../../utils/analytics';
 
 function isOnSpfDkimToolPath(pathname: string): boolean {
   return pathname.includes('/tools/spf-dkim');
@@ -127,8 +128,14 @@ export function SpfDkimCheckerPage() {
       // Clear error if we got at least one result
       if (spfRecord || dkimResults.length > 0) {
         setError(null);
+        trackDnsCheck('spf_dkim', 'success', {
+          domain,
+          found_spf: !!spfRecord,
+          found_dkim_count: dkimResults.length,
+        });
       } else if (!spfRecord && dkimResults.length === 0 && !dkimSelector.trim()) {
         setError('No SPF or DKIM records found. If you know your DKIM selector, try entering it manually.');
+        trackDnsCheck('spf_dkim', 'no_record', { domain });
       }
     } finally {
       setIsLoading(false);
