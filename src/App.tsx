@@ -5,13 +5,22 @@ import { OriginalPreview } from './components/OriginalPreview';
 import { PreviewPanel } from './components/PreviewPanel';
 import { EmailPreview } from './components/EmailPreview';
 import { ValidationPanel } from './components/ValidationPanel';
+import { PaymentGate } from './components/PaymentGate';
 import { Footer } from './components/Footer';
+import { BimiInfoPage } from './components/BimiInfoPage';
 import { convertToBimiSvg } from './core';
 import type { ConvertOptions, ValidationResult } from './core/types';
 import { downloadBimiSvg, copyToClipboard } from './utils/downloadUtils';
 import './App.css';
 
 function App() {
+  // Simple path-based view switch (no router). This also acts as a safety net if hosting falls back to index.html.
+  if (typeof window !== 'undefined' && window.location.pathname.includes('/what-is-bimi')) {
+    return <BimiInfoPage />;
+  }
+
+  const guideHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
+
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [originalPreview, setOriginalPreview] = useState<string | null>(null);
   const [bimiSvg, setBimiSvg] = useState<string | null>(null);
@@ -19,6 +28,7 @@ function App() {
   const [isConverting, setIsConverting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSvgSource, setIsSvgSource] = useState<boolean | null>(null);
+  const [hasPaid, setHasPaid] = useState(false);
   const [options, setOptions] = useState<ConvertOptions>({
     backgroundColor: '#FFFFFF',
     shape: 'circle',
@@ -92,6 +102,27 @@ function App() {
     }
   }, []);
 
+  // Check for payment success on mount
+  useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('paid') === 'true') {
+      setHasPaid(true);
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  });
+
+  const handlePaymentStart = useCallback(() => {
+    // TODO: Replace with your actual Stripe Payment Link
+    // Example: window.location.href = 'https://buy.stripe.com/test_...';
+    
+    // For demo purposes, we'll simulate a redirect and return
+    const confirm = window.confirm("This would redirect to Stripe for a $1.00 payment.\n\nClick OK to simulate a successful payment.");
+    if (confirm) {
+      setHasPaid(true);
+    }
+  }, []);
+
   const handleConvert = useCallback(async () => {
     if (!originalFile) return;
     await processFile(originalFile, options);
@@ -120,6 +151,11 @@ function App() {
         <p className="app-description">
           Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
         </p>
+        <div className="app-header-actions">
+          <a className="header-cta" href={guideHref}>
+            What is BIMI? Read the guide
+          </a>
+        </div>
       </header>
 
       <main className="app-main">
@@ -155,9 +191,13 @@ function App() {
 
             <PreviewPanel 
               bimiSvg={bimiSvg}
-              onDownload={handleDownloadSvg}
-              onCopy={handleCopySvg}
+              onDownload={hasPaid ? handleDownloadSvg : undefined}
+              onCopy={hasPaid ? handleCopySvg : undefined}
             />
+            
+            {bimiSvg && !hasPaid && (
+              <PaymentGate onPaymentStart={handlePaymentStart} />
+            )}
           </div>
 
           <EmailPreview bimiSvg={bimiSvg} companyName={options.title || 'Your Company'} />

@@ -1,4 +1,6 @@
 export function Footer() {
+  const infoHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
+
   return (
     <footer className="app-footer">
       <div className="footer-content">
@@ -8,6 +10,13 @@ export function Footer() {
             BIMI (Brand Indicators for Message Identification) allows brands to display verified logos 
             in supporting email clients. This tool automates the strict technical requirements for your logo.
           </p>
+          <ul className="footer-links">
+            <li>
+              <a href={infoHref}>
+                What is BIMI? (Guide)
+              </a>
+            </li>
+          </ul>
           <p>
             Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
           </p>

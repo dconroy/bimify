@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>What is BIMI? Brand Indicators for Message Identification (Guide)</title>
+    <meta
+      name="description"
+      content="Learn what BIMI (Brand Indicators for Message Identification) is, why it exists, how it works, and whether it’s worth it for your brand—plus a practical, high-level setup checklist."
+    />
+    <meta
+      name="keywords"
+      content="BIMI, Brand Indicators for Message Identification, BIMI logo, BIMI record, BIMI DNS, DMARC, DKIM, SPF, VMC, Verified Mark Certificate, email authentication"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://verifybimi.com/what-is-bimi/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://verifybimi.com/what-is-bimi/" />
+    <meta property="og:title" content="What is BIMI, and should your brand care?" />
+    <meta
+      property="og:description"
+      content="BIMI ties brand logos to strong email authentication. Learn what BIMI is, why it exists, how it works, and when it’s worth the effort."
+    />
+    <meta property="og:site_name" content="VerifyBIMI" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="What is BIMI, and should your brand care?" />
+    <meta
+      property="twitter:description"
+      content="A practical guide to BIMI: what it is, why it exists, requirements, DNS records, SVG rules, VMCs, and whether it’s worth it."
+    />
+
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c9cff;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        background: radial-gradient(1200px 700px at 20% 0%, rgba(124, 156, 255, 0.25), transparent 60%),
+          radial-gradient(900px 600px at 80% 10%, rgba(123, 255, 208, 0.15), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        line-height: 1.6;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 60px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: 38px;
+        line-height: 1.15;
+        margin: 18px 0 10px;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 18px;
+        margin: 0 0 22px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 22px 22px;
+      }
+      main p {
+        margin: 0 0 14px;
+      }
+      main p:last-child {
+        margin-bottom: 0;
+      }
+      .toc {
+        margin-top: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px 18px;
+      }
+      .toc-title {
+        font-weight: 750;
+        letter-spacing: 0.2px;
+        margin-bottom: 10px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .toc ul {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 6px;
+      }
+      .toc a {
+        font-weight: 650;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 28px 0 10px;
+      }
+      h3 {
+        font-size: 18px;
+        margin: 20px 0 8px;
+      }
+      ul {
+        margin: 10px 0 0 18px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .faq {
+        margin-top: 12px;
+        display: grid;
+        gap: 10px;
+      }
+      details {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: 650;
+      }
+      footer {
+        margin-top: 38px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        font-size: 14px;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        padding: 2px 6px;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--text);
+      }
+    </style>
+
+    <!-- Structured Data: Article + FAQ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "What is BIMI, and should your brand care?",
+        "description": "BIMI ties brand logos to strong email authentication. Learn what BIMI is, why it exists, how it works, and when it’s worth the effort.",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://verifybimi.com/what-is-bimi/"
+        },
+        "author": { "@type": "Organization", "name": "VerifyBIMI" },
+        "publisher": { "@type": "Organization", "name": "VerifyBIMI" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is BIMI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BIMI is an email standard that ties brand logos to strong email authentication. It is not an authentication protocol itself, but depends on SPF, DKIM, and an enforced DMARC policy."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does BIMI affect deliverability?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BIMI is not a deliverability feature by itself. It depends on strong authentication and DMARC enforcement, which can indirectly support healthier sender reputation over time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you need a VMC for BIMI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Some mailbox providers require a Verified Mark Certificate (VMC) before displaying a BIMI logo. Whether you need one depends on where your audience reads email."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the email authentication requirements for BIMI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "To be eligible for BIMI, you must have SPF and DKIM configured and DMARC enforced with p=quarantine or p=reject. A DMARC policy of p=none is not sufficient."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">VerifyBIMI</div>
+        <a class="pill" href="../" aria-label="Back to the BIMI logo converter">
+          <span>Back to the converter</span>
+          <span class="kbd">/</span>
+        </a>
+      </header>
+
+      <main>
+        <h1>What is BIMI, and should your brand care?</h1>
+        <p class="lede">
+          If you have noticed company logos starting to appear next to emails in some inboxes, that is not an accident.
+          It is usually the result of BIMI.
+        </p>
+
+        <div class="card">
+          <p>
+            <strong>BIMI</strong> stands for <strong>Brand Indicators for Message Identification</strong>. It is an email
+            specification that allows verified brands to display their official logo in supported email clients. The
+            goal is simple: make it easier for people to recognize legitimate email and harder for attackers to
+            impersonate trusted brands.
+          </p>
+          <p class="muted">
+            This guide explains what BIMI is, why it exists, how it works at a high level, and when it is worth the
+            effort.
+          </p>
+        </div>
+
+        <nav class="toc" aria-label="On this page">
+          <div class="toc-title">On this page</div>
+          <ul>
+            <li><a href="#what-is-bimi">What is BIMI?</a></li>
+            <li><a href="#why-bimi-exists">Why BIMI exists</a></li>
+            <li><a href="#requirements">Email authentication requirements</a></li>
+            <li><a href="#bimi-record">What is a BIMI DNS record?</a></li>
+            <li><a href="#svg-requirements">BIMI logos and SVG requirements</a></li>
+            <li><a href="#vmc">Verified Mark Certificates (VMCs)</a></li>
+            <li><a href="#support">Which mailbox providers support BIMI?</a></li>
+            <li><a href="#setup">High-level BIMI setup process</a></li>
+            <li><a href="#deliverability">Does BIMI affect deliverability?</a></li>
+            <li><a href="#worth-it">Is BIMI worth it for your brand?</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#final-thoughts">Final thoughts</a></li>
+          </ul>
+        </nav>
+
+        <h2 id="what-is-bimi">What is BIMI?</h2>
+        <p>
+          BIMI is an email standard that ties brand logos to strong email authentication. It is not an authentication
+          protocol itself, but it depends on authentication being done correctly.
+        </p>
+        <p>
+          When BIMI is set up properly, mailbox providers that support it may show your brand’s logo next to your
+          messages in the inbox or message view. This only happens after the provider confirms that the email is
+          authenticated and authorized by your domain.
+        </p>
+        <p><strong>In short, BIMI turns email authentication into a visible trust signal.</strong></p>
+
+        <h2 id="why-bimi-exists">Why BIMI exists</h2>
+        <p>
+          Email spoofing is a persistent problem. Attackers routinely send messages that look like they come from
+          well-known brands, banks, and online services. This hurts recipients, but it also hurts mailbox providers
+          when users lose trust in their inbox.
+        </p>
+        <p>
+          DMARC was created to stop this, but adoption has been slow. Many domains publish DMARC records without
+          enforcing them, which limits their effectiveness.
+        </p>
+        <p>
+          BIMI was introduced as an incentive. If a brand enforces strong authentication, it becomes eligible to
+          display its logo in supported inboxes. The logo is the reward, but the real benefit is stronger protection
+          against spoofing.
+        </p>
+
+        <h2 id="requirements">Email authentication requirements</h2>
+        <p>To be eligible for BIMI, a domain must already have email authentication in place:</p>
+        <ul>
+          <li>SPF must be configured</li>
+          <li>DKIM must be configured</li>
+          <li>DMARC must be enforced</li>
+        </ul>
+        <p>
+          DMARC enforcement means using either <strong>p=quarantine</strong> or <strong>p=reject</strong>. A policy of
+          <strong>p=none</strong> is not sufficient for BIMI, since it does not instruct mailbox providers to take
+          action against unauthenticated mail.
+        </p>
+
+        <h2 id="bimi-record">What is a BIMI DNS record?</h2>
+        <p>
+          BIMI is enabled through a DNS TXT record, similar to SPF, DKIM, and DMARC. The BIMI record tells mailbox
+          providers where to find your official logo file. The logo itself is hosted at a publicly accessible URL and
+          referenced from DNS.
+        </p>
+        <p>At a high level, the record does one thing: it points to the SVG file that represents your brand.</p>
+        <p>Publishing the BIMI record is typically one of the final steps, after authentication and logo preparation are complete.</p>
+
+        <h2 id="svg-requirements">BIMI logos and SVG requirements</h2>
+        <p>
+          BIMI logos must be provided as SVG files using the <strong>SVG Tiny 1.2</strong> format. This format is
+          intentionally restrictive and designed to be safe for email clients to render.
+        </p>
+        <p>
+          Not all existing SVGs are compatible. Logos often need to be simplified, flattened, and cleaned up to meet
+          the specification. This is one of the most common stumbling blocks during BIMI setup.
+        </p>
+
+        <h2 id="vmc">Verified Mark Certificates (VMCs)</h2>
+        <p>
+          Some mailbox providers require a Verified Mark Certificate before displaying a BIMI logo. A VMC is a
+          certificate that confirms the brand has legal rights to the logo being displayed. It is issued by an approved
+          certificate authority and typically renewed annually.
+        </p>
+        <p>
+          Not all mailbox providers require a VMC, but some use it as a strong signal of brand legitimacy. Whether a
+          VMC is required depends on where your audience primarily reads email.
+        </p>
+
+        <h2 id="support">Which mailbox providers support BIMI?</h2>
+        <p>
+          BIMI support is growing, but it is not universal. Currently, BIMI is supported by several major mailbox
+          providers, including Gmail, Yahoo, AOL, and Fastmail. Support in other clients may vary, and requirements
+          such as VMCs differ by provider.
+        </p>
+        <p>
+          Some widely used email clients do not yet display BIMI logos. That does not prevent you from implementing
+          BIMI, but it is worth setting expectations internally about where logos will and will not appear.
+        </p>
+
+        <h2 id="setup">High-level BIMI setup process</h2>
+        <p>At a high level, setting up BIMI involves the following steps:</p>
+        <ul>
+          <li>Identify the domain used for sending email</li>
+          <li>Confirm SPF and DKIM are working correctly</li>
+          <li>Enforce DMARC with quarantine or reject</li>
+          <li>Prepare a compliant SVG logo</li>
+          <li>Obtain a VMC if required for your target inboxes</li>
+          <li>Publish the BIMI DNS record</li>
+          <li>Validate the configuration and wait for mailbox providers to process it</li>
+        </ul>
+        <p>Even after everything is correct, it can take time for logos to appear consistently.</p>
+
+        <h2 id="deliverability">Does BIMI affect deliverability?</h2>
+        <p>
+          BIMI is not a deliverability feature by itself. Mailbox providers do not promise better inbox placement just
+          because BIMI is present.
+        </p>
+        <p>
+          That said, BIMI depends on strong authentication and enforcement. Those factors do contribute to sender
+          reputation and protection against abuse. Over time, that can indirectly support healthier deliverability.
+        </p>
+        <p>
+          BIMI may also improve engagement. Recognizable logos can increase trust and help messages stand out, which can
+          lead to higher open rates.
+        </p>
+
+        <h2 id="worth-it">Is BIMI worth it for your brand?</h2>
+        <p>
+          BIMI tends to be most valuable for brands that are frequently targeted by impersonation, such as financial
+          services, large consumer brands, marketplaces, and SaaS platforms.
+        </p>
+        <p>
+          Smaller organizations can also benefit. Spoofing is not limited to big brands, and attackers often target
+          smaller companies with weaker security controls.
+        </p>
+        <p>
+          If you already have SPF, DKIM, and enforced DMARC, BIMI can be a logical next step. If you do not, those
+          basics should come first.
+        </p>
+
+        <h2 id="faq">FAQ</h2>
+        <div class="faq" aria-label="Frequently asked questions about BIMI">
+          <details>
+            <summary>What is BIMI?</summary>
+            <p>
+              BIMI is an email standard that can display a brand’s verified logo in supported inboxes, but only after
+              strong email authentication is in place and enforced.
+            </p>
+          </details>
+          <details>
+            <summary>What DMARC policy do you need for BIMI?</summary>
+            <p>
+              DMARC must be enforced with <strong>p=quarantine</strong> or <strong>p=reject</strong>. A policy of
+              <strong>p=none</strong> is not sufficient for BIMI eligibility.
+            </p>
+          </details>
+          <details>
+            <summary>What format does a BIMI logo need to be?</summary>
+            <p>
+              BIMI logos must be an <strong>SVG Tiny 1.2</strong> file. Many SVGs need cleanup and simplification to
+              meet the spec.
+            </p>
+          </details>
+          <details>
+            <summary>Do you need a Verified Mark Certificate (VMC)?</summary>
+            <p>
+              Some mailbox providers require a VMC to display the logo. Whether you need one depends on where your
+              audience reads email and which providers you care about most.
+            </p>
+          </details>
+          <details>
+            <summary>Does BIMI improve deliverability?</summary>
+            <p>
+              BIMI is not a direct deliverability feature. It relies on strong authentication, which can indirectly
+              support healthier sending practices over time.
+            </p>
+          </details>
+        </div>
+
+        <h2 id="final-thoughts">Final thoughts</h2>
+        <p>
+          The logo is the visible part of BIMI, but it is not the main point. BIMI exists to encourage better email
+          authentication and protect recipients from fraud.
+        </p>
+        <p>
+          If your brand sends meaningful volumes of email and cares about trust, BIMI is worth understanding, even if
+          you decide not to implement it right away.
+        </p>
+      </main>
+
+      <footer>
+        <div>
+          Want to prepare a BIMI-ready logo file? Use the converter at <a href="../">verifybimi.com</a>.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+
