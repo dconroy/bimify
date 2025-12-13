@@ -13,7 +13,7 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
   const {
     backgroundColor = '#FFFFFF',
     shape = 'circle',
-    paddingPercent = 12.5,
+    paddingPercent = 3, // Reduced default to maximize logo size
     title = '',
   } = options;
 
@@ -115,7 +115,7 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
         <input
           id="padding"
           type="range"
-          min="5"
+          min="1"
           max="25"
           step="0.5"
           value={paddingPercent}
@@ -124,7 +124,7 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
           className="slider"
         />
         <div className="slider-labels">
-          <span>5%</span>
+          <span>1% (max size)</span>
           <span>25%</span>
         </div>
       </div>

@@ -19,7 +19,7 @@
 import type { ConvertOptions, Shape } from './types';
 
 const DEFAULT_VIEWBOX_SIZE = 100;
-const DEFAULT_PADDING_PERCENT = 12.5;
+const DEFAULT_PADDING_PERCENT = 3; // Reduced from 12.5% to maximize logo size within circle
 const DEFAULT_BACKGROUND_COLOR = '#FFFFFF';
 
 /**

@@ -32,7 +32,7 @@ function App() {
   const [options, setOptions] = useState<ConvertOptions>({
     backgroundColor: '#FFFFFF',
     shape: 'circle',
-    paddingPercent: 12.5,
+    paddingPercent: 3, // Reduced default to maximize logo size
     title: '',
   });
 
