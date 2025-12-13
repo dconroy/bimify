@@ -175,7 +175,7 @@
 
         <div class="card">
           <p><strong>Before you publish BIMI:</strong> ensure SPF and DKIM are passing and DMARC is enforced (p=quarantine or p=reject).</p>
-          <p style="margin-bottom: 0"><a href="../../tools/dmarc/">Verify your DMARC record →</a></p>
+          <p style="margin-bottom: 0"><a href="../../tools/spf-dkim/">Check SPF & DKIM</a> • <a href="../../tools/dmarc/">Verify DMARC</a></p>
         </div>
 
         <h2 id="example-basic">Example: basic BIMI record (logo only)</h2>
@@ -196,10 +196,10 @@
 
         <h2 id="troubleshooting">Quick troubleshooting checklist</h2>
         <ul>
-          <li><strong>DMARC enforcement:</strong> you need <code>p=quarantine</code> or <code>p=reject</code> (not <code>p=none</code>).</li>
+          <li><strong>DMARC enforcement:</strong> you need <code>p=quarantine</code> or <code>p=reject</code> (not <code>p=none</code>). <a href="../../tools/dmarc/">Check DMARC</a>.</li>
           <li><strong>Correct domain:</strong> publish the BIMI record on the domain that is actually used for 5322.From / alignment.</li>
-          <li><strong>DNS propagation:</strong> wait for TTL and check from multiple resolvers.</li>
-          <li><strong>Logo validation:</strong> validate the SVG (Tiny 1.2, no embedded raster, square framing).</li>
+          <li><strong>DNS propagation:</strong> wait for TTL and check from multiple resolvers. <a href="../../tools/bimi/">Check BIMI record</a>.</li>
+          <li><strong>Logo validation:</strong> validate the SVG (Tiny 1.2, no embedded raster, square framing). <a href="../../">Convert SVG</a>.</li>
         </ul>
 
         <p>
