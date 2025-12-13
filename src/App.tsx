@@ -124,7 +124,10 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>VerifyBIMI</h1>
+        <div className="app-header-brand">
+          <img src="/logo.png" alt="VerifyBIMI" className="app-logo" />
+          <h1>VerifyBIMI</h1>
+        </div>
         <p className="app-description">
           Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
         </p>
