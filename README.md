@@ -3,6 +3,13 @@
 
 A browser-only web application that converts uploaded logos (PNG, JPG, SVG) into BIMI-compliant SVG format with live preview and validation.
 
+## Transparency & Privacy
+
+This application is fully transparent in its operation:
+- **Client-Side Only**: All processing (logo conversion, validation, preview) happens entirely in your browser.
+- **No Uploads**: Your logos are never uploaded to any server. They remain on your device.
+- **Open Source**: The full source code is available here for inspection to verify how the tool works.
+
 ## What is BIMI?
 
 BIMI (Brand Indicators for Message Identification) is an email standard that allows brands to display their logo next to authenticated emails. BIMI requires logos to be in a specific SVG format with strict requirements.
@@ -54,62 +61,6 @@ BIMI (Brand Indicators for Message Identification) is an email standard that all
 - ✅ Safe padding area for artwork
 - ✅ Vector-only output
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ and npm
-
-### Installation
-
-1. Clone or download this repository
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-The app will be available at `http://localhost:5173` (or the port shown in the terminal).
-
-### Build for Production
-
-Build the production bundle:
-
-```bash
-npm run build
-```
-
-Preview the production build:
-
-```bash
-npm run preview
-```
-
-### Deploy to GitHub Pages
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
-
-**Quick setup:**
-1. Push your code to GitHub
-2. Enable GitHub Pages in repository settings (Source: GitHub Actions)
-3. Configure DNS for custom domain `verifybimi.com` (see [DNS_SETUP.md](./DNS_SETUP.md))
-4. Your app will be live at `https://verifybimi.com`
-
-**DNS Configuration:** See [DNS_SETUP.md](./DNS_SETUP.md) for step-by-step DNS setup instructions.
-
-The repository includes:
-- Automated GitHub Actions workflow that deploys on every push to `main`
-- CNAME file configured for `verifybimi.com`
-- Base path set to root (`/`) for custom domain
-
 ## Usage
 
 1. **Upload a Logo**: Drag and drop or click to browse for a logo file (PNG, JPG, or SVG)
@@ -138,18 +89,7 @@ The application is built with a modular architecture that separates core logic f
   - DMARC record parsing and validation
   - Analytics tracking
 
-### Future Micro-SaaS Integration
-
-The codebase is structured to easily add:
-
-- User authentication
-- Usage limits and quotas
-- API endpoints
-- Analytics tracking
-- Cloud storage for converted logos
-- Batch processing
-
-See `src/core/README.md` for more details on backend integration.
+See `src/core/README.md` for more details on the core library.
 
 ## Known Limitations
 
@@ -235,7 +175,7 @@ bimify/
 - **Vendor Chunks**: React is separated into its own chunk for better caching
 - **Deferred Analytics**: Google Analytics loads after page interaction
 - **Preconnect Hints**: Early connection to third-party domains
-- **Cache Headers**: Optimized cache strategies for static assets (see `CACHE_HEADERS.md`)
+- **Cache Headers**: Optimized cache strategies for static assets
 - **LCP Optimization**: Critical images have explicit dimensions and priority hints
 
 ## Accessibility
@@ -246,26 +186,11 @@ bimify/
 - **Keyboard Navigation**: Full keyboard support for interactive elements
 - **Screen Reader Support**: Semantic HTML and ARIA labels throughout
 
-## Contributing
-
-This is a browser-only application with no backend. All processing happens client-side.
-
-### Adding New Tools
-
-To add a new tool to the Tools section:
-
-1. Create a new component in `src/components/tools/`
-2. Add a route in `src/App.tsx` (pathname check)
-3. Add entry to `src/components/tools/ToolsPage.tsx`
-4. Create redirect stub in `public/tools/[tool-name]/index.html` for GitHub Pages
-5. Update sitemap.xml with the new tool URL
-
 ## License
 
-MIT License - feel free to use this code for your own projects.
+MIT License
 
 ## References
 
 - [BIMI Specification](https://bimigroup.org/)
 - [SVG Specification](https://www.w3.org/TR/SVG2/)
-
