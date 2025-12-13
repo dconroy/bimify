@@ -4,9 +4,6 @@ export function Header() {
   const baseUrl = import.meta.env.BASE_URL || '/';
   const guideHref = `${baseUrl}what-is-bimi/`;
   const toolsHref = `${baseUrl}tools/`;
-  const dmarcHref = `${baseUrl}tools/dmarc/`;
-  const bimiHref = `${baseUrl}tools/bimi/`;
-  const spfDkimHref = `${baseUrl}tools/spf-dkim/`;
   
   // Simple check for home page to conditionally render "Converter" link
   const [isHome, setIsHome] = useState(false);
