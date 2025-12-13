@@ -18,6 +18,9 @@ export default defineConfig({
     // Enable source maps for production debugging (optional, can disable for smaller builds)
     sourcemap: false,
     rollupOptions: {
+      // Enable tree-shaking (default, but explicit)
+      // Tree-shaking configuration must be in rollupOptions to be passed to Rollup
+      treeshake: true,
       output: {
         // Code splitting: separate vendor chunks and core logic
         manualChunks: (id) => {
@@ -46,8 +49,6 @@ export default defineConfig({
     },
     // Chunk size warnings threshold (500kb default)
     chunkSizeWarningLimit: 600,
-    // Enable tree-shaking (default, but explicit)
-    treeshake: true,
   },
 })
 
