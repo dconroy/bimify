@@ -658,10 +658,10 @@ body {
 }
 
 /* Section Headings */
-.controls-panel h3,
-.preview-header h3,
-.email-preview-panel h3,
-.validation-panel h3,
+.controls-panel h2,
+.preview-header h2,
+.email-preview-panel h2,
+.validation-panel h2,
 .download-section h3 {
   margin: 0 0 1.5rem;
   color: var(--text-main);
@@ -1260,7 +1260,7 @@ body {
   border: 1px solid rgba(255,255,255,0.5);
 }
 
-.email-preview-panel h3 {
+.email-preview-panel h2 {
   margin: 0 0 1.5rem;
   color: var(--text-main);
   font-size: 1.25rem;
