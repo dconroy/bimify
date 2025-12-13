@@ -37,15 +37,7 @@ export function Header() {
         
         <a className="header-nav-link" href={guideHref}>Guide</a>
 
-        <details className="header-tools">
-          <summary className="header-cta">BIMI Tools</summary>
-          <div className="header-tools-menu" role="menu">
-            <a className="header-tools-item" href={toolsHref}>Tools home</a>
-            <a className="header-tools-item" href={dmarcHref}>DMARC verifier</a>
-            <a className="header-tools-item" href={bimiHref}>BIMI checker</a>
-            <a className="header-tools-item" href={spfDkimHref}>SPF/DKIM checker</a>
-          </div>
-        </details>
+        <a className="header-cta" href={toolsHref}>BIMI Tools</a>
       </div>
     </header>
   );
