@@ -9,7 +9,7 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
   if (!validation) {
     return (
       <div className="validation-panel">
-        <h3>Validation</h3>
+        <h2>Validation</h2>
         <p className="validation-placeholder">Convert a logo to see validation results</p>
       </div>
     );
@@ -22,7 +22,7 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
 
   return (
     <div className="validation-panel">
-      <h3>Validation Status</h3>
+      <h2>Validation Status</h2>
       
       <div className={`validation-status ${statusClass}`}>
         <span className="status-icon">{statusIcon}</span>
@@ -37,7 +37,7 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
 
       {validation.errors.length > 0 && (
         <div className="validation-errors">
-          <h4>Errors</h4>
+          <h3>Errors</h3>
           <ul>
             {validation.errors.map((error, index) => (
               <li key={index}>{error}</li>
@@ -48,7 +48,7 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
 
       {validation.warnings.length > 0 && (
         <div className="validation-warnings">
-          <h4>Warnings</h4>
+          <h3>Warnings</h3>
           <ul className="checklist">
             {validation.warnings.map((warning, index) => (
               <li key={index} className="check-warning">
@@ -62,7 +62,7 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
 
       {validation.checks && validation.checks.length > 0 && (
         <div className="validation-checklist">
-          <h4>BIMI Compliance Checklist</h4>
+          <h3>BIMI Compliance Checklist</h3>
           {isSvgSource === false && (
             <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '1rem', fontStyle: 'italic' }}>
               Validation result applies to the generated SVG. Since this started from a raster image, visual accuracy may still require a designer to review.
@@ -83,7 +83,7 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
       )}
 
       <div className="validation-next-steps">
-        <h4>Next steps (for BIMI)</h4>
+        <h3>Next steps (for BIMI)</h3>
         <p style={{ marginTop: 0 }}>
           BIMI eligibility typically requires an enforced DMARC policy (<code>p=quarantine</code> or <code>p=reject</code>).{' '}
           <a href={dmarcToolHref}>Verify your DMARC record</a>.

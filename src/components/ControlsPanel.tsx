@@ -35,7 +35,7 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
 
   return (
     <div className="controls-panel">
-      <h3>Conversion Options</h3>
+      <h2>Conversion Options</h2>
       
       {isSvgSource === false && (
         <div className="raster-warning-banner">
@@ -61,7 +61,7 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
       )}
       
       <div className="control-group">
-        <label htmlFor="background-color">Background Color</label>
+        <label htmlFor="background-color" id="background-color-label">Background Color</label>
         <div className="color-input-wrapper">
           <input
             id="background-color"
@@ -69,6 +69,7 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
             value={backgroundColor}
             onChange={handleBackgroundColorChange}
             disabled={disabled}
+            aria-labelledby="background-color-label"
           />
           <input
             type="text"
@@ -76,6 +77,8 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
             onChange={(e) => onOptionsChange({ ...options, backgroundColor: e.target.value })}
             disabled={disabled}
             className="color-text-input"
+            aria-labelledby="background-color-label"
+            aria-label="Background color hex value"
           />
         </div>
       </div>

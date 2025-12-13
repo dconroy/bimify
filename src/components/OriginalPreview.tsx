@@ -63,11 +63,15 @@ export function OriginalPreview({ originalFile, originalPreview, options }: Orig
   return (
     <div className="preview-panel">
       <div className="preview-header">
-        <h3>Original Logo</h3>
+        <h2>Original Logo</h2>
         <div className="zoom-controls">
-          <button onClick={() => setZoom(Math.max(0.5, zoom - 0.25))}>-</button>
+          <button onClick={() => setZoom(Math.max(0.5, zoom - 0.25))} aria-label="Zoom out preview">
+            -
+          </button>
           <span>{Math.round(zoom * 100)}%</span>
-          <button onClick={() => setZoom(Math.min(2, zoom + 0.25))}>+</button>
+          <button onClick={() => setZoom(Math.min(2, zoom + 0.25))} aria-label="Zoom in preview">
+            +
+          </button>
         </div>
       </div>
       
@@ -77,7 +81,7 @@ export function OriginalPreview({ originalFile, originalPreview, options }: Orig
             <div className="preview-mode-label">Raw Upload</div>
             <div className="preview-container">
               <div style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={originalPreview} alt="Original logo" />
+                <img src={originalPreview} alt="Original logo" loading="lazy" decoding="async" />
               </div>
             </div>
           </div>

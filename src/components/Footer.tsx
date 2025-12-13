@@ -114,6 +114,8 @@ export function Footer() {
               className="github-avatar"
               width="32"
               height="32"
+              loading="lazy"
+              decoding="async"
             />
             <span>Built by dconroy</span>
           </a>

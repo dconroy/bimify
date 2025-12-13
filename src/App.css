@@ -1083,7 +1083,7 @@ body {
   margin-top: 1.5rem;
 }
 
-.validation-warnings h4 {
+.validation-warnings h3 {
   color: var(--warning);
   margin-bottom: 1rem;
   font-size: 1.1rem;
@@ -1094,7 +1094,7 @@ body {
   margin-top: 1.5rem;
 }
 
-.validation-errors h4 {
+.validation-errors h3 {
   color: var(--danger);
   margin-bottom: 1rem;
   font-size: 1.1rem;
@@ -1332,7 +1332,8 @@ body {
   align-items: center;
   justify-content: center;
   padding-top: 0.5rem;
-  color: #9ca3af;
+  /* Avoid low-contrast icon on white background */
+  color: var(--text-muted);
   font-size: 1.25rem;
   cursor: pointer;
   transition: color 0.2s;

@@ -167,7 +167,15 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="app-header-brand">
-          <img src="/logo.png" alt="VerifyBIMI" className="app-logo" />
+          <img
+            src="/logo.png"
+            alt="VerifyBIMI"
+            className="app-logo"
+            width="56"
+            height="56"
+            decoding="async"
+            fetchPriority="high"
+          />
           <h1>VerifyBIMI</h1>
         </div>
         <p className="app-description">

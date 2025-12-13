@@ -12,11 +12,15 @@ export function PreviewPanel({ bimiSvg, onDownload, onCopy }: PreviewPanelProps)
   return (
     <div className="preview-panel">
       <div className="preview-header">
-        <h3>BIMI Version</h3>
+        <h2>BIMI Version</h2>
         <div className="zoom-controls">
-          <button onClick={() => setZoom(Math.max(0.5, zoom - 0.25))}>-</button>
+          <button onClick={() => setZoom(Math.max(0.5, zoom - 0.25))} aria-label="Zoom out preview">
+            -
+          </button>
           <span>{Math.round(zoom * 100)}%</span>
-          <button onClick={() => setZoom(Math.min(2, zoom + 0.25))}>+</button>
+          <button onClick={() => setZoom(Math.min(2, zoom + 0.25))} aria-label="Zoom in preview">
+            +
+          </button>
         </div>
       </div>
       

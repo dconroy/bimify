@@ -7,7 +7,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
   if (!bimiSvg) {
     return (
       <div className="email-preview-panel">
-        <h3>Email Preview</h3>
+        <h2>Email Preview</h2>
         <p className="email-preview-placeholder">Convert to see how your BIMI logo appears in email</p>
       </div>
     );
@@ -15,14 +15,14 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
 
   return (
     <div className="email-preview-panel">
-      <h3>Email Preview</h3>
+      <h2>Email Preview</h2>
       <p className="email-preview-hint">How your BIMI logo appears in supporting email clients</p>
       
       <div className="email-inbox-mockup">
         <div className="email-list">
           <div className="email-item email-item-unread">
             <div className="email-checkbox">
-              <input type="checkbox" />
+              <input type="checkbox" aria-label={`Select email: Welcome to ${companyName}`} />
             </div>
             <div className="email-star">
               <span>☆</span>
@@ -30,6 +30,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
             <div className="email-avatar">
               <div 
                 className="bimi-logo-in-email"
+                aria-hidden="true"
                 dangerouslySetInnerHTML={{ __html: bimiSvg }}
               />
             </div>
@@ -47,7 +48,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
 
           <div className="email-item">
             <div className="email-checkbox">
-              <input type="checkbox" />
+              <input type="checkbox" aria-label={`Select email: Monthly Newsletter - December 2024`} />
             </div>
             <div className="email-star">
               <span>☆</span>
@@ -55,6 +56,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
             <div className="email-avatar">
               <div 
                 className="bimi-logo-in-email"
+                aria-hidden="true"
                 dangerouslySetInnerHTML={{ __html: bimiSvg }}
               />
             </div>
@@ -72,7 +74,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
 
           <div className="email-item">
             <div className="email-checkbox">
-              <input type="checkbox" />
+              <input type="checkbox" aria-label={`Select email: Order #12345 Confirmation`} />
             </div>
             <div className="email-star">
               <span>☆</span>
@@ -80,6 +82,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
             <div className="email-avatar">
               <div 
                 className="bimi-logo-in-email"
+                aria-hidden="true"
                 dangerouslySetInnerHTML={{ __html: bimiSvg }}
               />
             </div>
@@ -97,7 +100,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
 
           <div className="email-item">
             <div className="email-checkbox">
-              <input type="checkbox" />
+              <input type="checkbox" aria-label={`Select email: Account Security Alert`} />
             </div>
             <div className="email-star">
               <span>☆</span>
@@ -105,6 +108,7 @@ export function EmailPreview({ bimiSvg, companyName = 'Your Company' }: EmailPre
             <div className="email-avatar">
               <div 
                 className="bimi-logo-in-email"
+                aria-hidden="true"
                 dangerouslySetInnerHTML={{ __html: bimiSvg }}
               />
             </div>

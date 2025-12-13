@@ -105,13 +105,24 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={handleBrowseClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleBrowseClick();
+          }
+        }}
+        aria-label="Upload a logo file"
       >
         <input
+          id="logo-file-input"
           ref={fileInputRef}
           type="file"
           accept={acceptedFormats.join(',')}
           onChange={handleFileInput}
           style={{ display: 'none' }}
+          aria-label="Choose a logo file to upload"
         />
         <div className="upload-content">
           <svg
