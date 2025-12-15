@@ -150,3 +150,4 @@ export function pickLikelySpfRecord(txtAnswers: string[]): string | null {
   return exact || txtAnswers[0] || null;
 }
 
+

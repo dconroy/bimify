@@ -7,9 +7,10 @@ interface ControlsPanelProps {
   onConvert: () => void;
   disabled?: boolean;
   isSvgSource?: boolean | null;
+  hasFile?: boolean;
 }
 
-export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, isSvgSource }: ControlsPanelProps) {
+export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, isSvgSource, hasFile = false }: ControlsPanelProps) {
   const {
     backgroundColor = '#FFFFFF',
     shape = 'circle',
@@ -35,6 +36,14 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
 
   return (
     <div className="controls-panel">
+      {!hasFile && (
+        <div className="controls-overlay">
+          <div className="controls-overlay-text">
+            Upload an image above to unlock controls
+          </div>
+        </div>
+      )}
+
       <h2>Conversion Options</h2>
       
       {isSvgSource === false && (
@@ -160,4 +169,3 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, i
     </div>
   );
 }
-

@@ -228,6 +228,7 @@ function App() {
               onConvert={handleConvert}
               disabled={!originalFile || isConverting}
               isSvgSource={isSvgSource}
+              hasFile={!!originalFile}
             />
 
             {error && (
